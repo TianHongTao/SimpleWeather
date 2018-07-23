@@ -1,5 +1,6 @@
 package com.simpleweather.simpleweather.activity;
 
+import android.app.LauncherActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
@@ -16,6 +17,8 @@ public class CityActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.city_activity_city_select);
         Intent intent = getIntent();
         String currentCity = intent.getStringExtra(MainActivity.CURRENT_CITY);
+
+
     }
 
 }
