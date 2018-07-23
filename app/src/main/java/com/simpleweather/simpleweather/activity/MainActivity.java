@@ -1,5 +1,6 @@
 package com.simpleweather.simpleweather.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements
     // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
+    public static final String CURRENT_CITY = "com.simpleweather.simpleweather.CURRENT_CITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +64,7 @@ public class MainActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                selectCity();
             }
         });
 
@@ -255,5 +256,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+    public void selectCity(){
+        Intent intent = new Intent(this, CityActivity.class);
+        intent.putExtra(CURRENT_CITY,"北京");
+        startActivity(intent);
     }
 }

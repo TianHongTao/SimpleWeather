@@ -10,4 +10,6 @@
     <string name="navigation_drawer_diary">日记</string>
     <string name="navigation_drawer_setting">设置</string>
     <string name="navigation_drawer_about_us">关于</string>
+    <string name="title_activity_city">CityActivity</string>
+    <string name="city_activity_city_select">选择城市</string>
 </resources>
