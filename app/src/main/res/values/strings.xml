@@ -10,4 +10,25 @@
     <string name="navigation_drawer_diary">日记</string>
     <string name="navigation_drawer_setting">设置</string>
     <string name="navigation_drawer_about_us">关于</string>
+    <string name="temperature">29</string>
+    <string name="度">°</string>
+    <string name="分割">|</string>
+    <string name="daily">未来5日</string>
+    <string name="daily_info1">第一天</string>
+    <string name="hourly">未来48小时</string>
+    <string name="hourly_info">第五天</string>
+    <string name="hourly_info4">第四天</string>
+    <string name="第二天">第二天</string>
+    <string name="详细信息">详细信息</string>
+    <string name="空气质量">空气质量</string>
+    <string name="第三天">第三天</string>
+    <string name="location">北京</string>
+    <string name="info">7月23日,周一16:40</string>
+    <string name="今天">今天</string>
+    <string name="多云">多云</string>
+    <string name="description">今天晚间20点后转小雨</string>
+    <string name="第四天">第四天</string>
+    <string name="第五天">第五天</string>
+    <string name="第六天">第一天</string>
+    <string name="第一天">第一天</string>
 </resources>
