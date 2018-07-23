@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
+import com.google.gson.Gson;
 import com.simpleweather.simpleweather.R;
 
 public class CityActivity extends AppCompatActivity {
@@ -18,7 +19,7 @@ public class CityActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String currentCity = intent.getStringExtra(MainActivity.CURRENT_CITY);
 
-
+        Gson gson;
     }
 
 }
