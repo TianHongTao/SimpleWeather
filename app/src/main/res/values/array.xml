@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="nav_item_activity_titles">
+        <item>天气预报</item>
+        <item>日历</item>
+        <item>日历</item>
+        <item>设置</item>
+        <item>关于我们</item>
+    </string-array>
+</resources>
