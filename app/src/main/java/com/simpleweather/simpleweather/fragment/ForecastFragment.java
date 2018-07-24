@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,6 +69,8 @@ public class ForecastFragment extends Fragment {
     private double longitude = 116.379;
     private TextView info1 = null;
     HorizontalScrollView horizontalScrollView=null;
+    ImageView icon = null;
+    ImageView background = null;
     View F_view = null;
     Weather WInfo = new Weather();
 
@@ -137,7 +141,7 @@ public class ForecastFragment extends Fragment {
                 Log.d("str", "== in android 6.0, getting permission");
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1000, locationListener);
             String locationProvider = LocationManager.GPS_PROVIDER;
             Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
             new Thread(networkTask).start();
@@ -149,8 +153,9 @@ public class ForecastFragment extends Fragment {
     public void set_Dinfo(int i){
         DailyWeatherInfo DWInfo = WInfo.getDailyWeatherInfo(i);
         StringBuilder D_infos = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("0.00");
         D_infos.append("日期"+DWInfo.getDate()+"\n");
-        D_infos.append("降水"+String.valueOf(Math.floor(DWInfo.getPrecipitation()[1]*100))+"%\n");
+        D_infos.append("降水"+String.valueOf(df.format(DWInfo.getPrecipitation()[1]*100))+"%\n");
         D_infos.append("天气 "+DWInfo.getSkycon()+"\n");
         D_infos.append("AQI"+String.valueOf(DWInfo.getAqi()[1])+"°\n");
         D_infos.append("高温"+String.valueOf(DWInfo.getTemperature()[0])+"°\n");
@@ -159,6 +164,22 @@ public class ForecastFragment extends Fragment {
         D_infos.append("日落"+String.valueOf(DWInfo.getSunsetTime()[1])+"°\n");
         info1.setText(D_infos.toString());
         return;
+    }
+
+    public void choos_Icon(String skycon){
+        switch (skycon)
+        {
+            case "晴天" :icon.setImageResource(R.drawable.ic_sun); ; break;
+            case "晴夜" :icon.setImageResource(R.drawable.ic_sun_night) ; break;
+            case "多云天" :icon.setImageResource(R.drawable.ic_partlycloudy) ; break;
+            case "多云夜" :icon.setImageResource(R.drawable.ic_partlycloudy_night) ; break;
+            case "阴" :icon.setImageResource(R.drawable.ic_cloudy) ; break;
+            case "雨" :icon.setImageResource(R.drawable.ic_rain) ; break;
+            case "雪" :icon.setImageResource(R.drawable.ic_snow) ; break;
+            case "风" :icon.setImageResource(R.drawable.ic_wind) ; break;
+            case "雾霾沙尘" :icon.setImageResource(R.drawable.ic_smog) ; break;
+            default:icon.setImageResource(R.drawable.ic_none) ;
+        }
     }
 
     Handler handler = new Handler() {
@@ -190,12 +211,13 @@ public class ForecastFragment extends Fragment {
             set_Dinfo(3);
             info1 = F_view.findViewById(R.id.fourth_day);
             set_Dinfo(4);
+            DecimalFormat df = new DecimalFormat("0.00");
             info1 = F_view.findViewById(R.id.pm25);
             info1.setText(String.valueOf(now.getPm25()));
             info1 = F_view.findViewById(R.id.humidity);
-            info1.setText(String.valueOf(now.getHumidity()*100)+"%");
+            info1.setText(String.valueOf(df.format(now.getHumidity()*100))+"%");
             info1 = F_view.findViewById(R.id.intensity);
-            info1.setText(String.valueOf(now.getIntensity_l()*100)+"%");
+            info1.setText(String.valueOf(df.format(now.getIntensity_l()*100))+"%");
             info1 = F_view.findViewById(R.id.direction);
             info1.setText(String.valueOf(now.getDirection()));
             info1 = F_view.findViewById(R.id.speed);
@@ -207,7 +229,7 @@ public class ForecastFragment extends Fragment {
                 HoulyWeatherInfo HWInfo = WInfo.getHourlyWeatherInfo(i);
                 StringBuilder D_infos = new StringBuilder();
                 D_infos.append("日期\n"+HWInfo.getDatetime()+"\n");
-                D_infos.append("降水"+String.valueOf(Math.floor(HWInfo.getPrecipitation()*100))+"%\n");
+                D_infos.append("降水"+String.valueOf(df.format(HWInfo.getPrecipitation()*100))+"%\n");
                 D_infos.append("天气 "+HWInfo.getSkycon()+"\n");
                 D_infos.append("AQI"+String.valueOf(HWInfo.getAqi())+"°\n");
                 D_infos.append("云量"+String.valueOf(HWInfo.getCloudrate())+"°\n");
@@ -222,6 +244,8 @@ public class ForecastFragment extends Fragment {
                 T.setGravity(Gravity.CENTER);
                 linearLayout.addView(T);
             }
+            icon = F_view.findViewById(R.id.icon);
+            choos_Icon(now.getSkycon());
         }
     };
 
