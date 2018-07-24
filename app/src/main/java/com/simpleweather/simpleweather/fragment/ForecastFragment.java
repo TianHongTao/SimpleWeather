@@ -81,6 +81,7 @@ public class ForecastFragment extends Fragment {
     public void ChooseCity(String city) {
         this.city = city;
         is_choose = true;
+        new Thread(networkTask).start();
     }
 
     public ForecastFragment() {
@@ -139,7 +140,6 @@ public class ForecastFragment extends Fragment {
                         Log.e("Map", "Location changed : Lat: " + location.getLatitude() + " Lng: " + location.getLongitude());
                         latitude = location.getLatitude(); // 经度
                         longitude = location.getLongitude(); // 纬度
-//                        ChooseCity("上海");
                         new Thread(networkTask).start();
                     }
                 }
