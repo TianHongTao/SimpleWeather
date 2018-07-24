@@ -27,13 +27,11 @@
         <item>热门</item>
         <item>热门</item>
         <item>热门</item>
-        <item>热门</item>
         <item>A</item>
         <item>A</item>
         <item>A</item>
         <item>A</item>
         <item>A</item>
-        <item>B</item>
         <item>B</item>
         <item>B</item>
         <item>B</item>
@@ -132,14 +130,12 @@
         <item>S</item>
         <item>S</item>
         <item>S</item>
-        <item>S</item>
         <item>T</item>
         <item>T</item>
         <item>T</item>
         <item>T</item>
         <item>T</item>
         <item>T</item>
-        <item>W</item>
         <item>W</item>
         <item>W</item>
         <item>W</item>
@@ -179,9 +175,8 @@
         <item>Z</item>
     </string-array>
     <string-array name="city_description_list">
-        <item>北京首都</item>
-        <item>上海虹桥</item>
-        <item>上海浦东</item>
+        <item>北京</item>
+        <item>上海</item>
         <item>广州</item>
         <item>深圳</item>
         <item>香港</item>
@@ -203,8 +198,7 @@
         <item>阿克苏</item>
         <item>阿勒泰</item>
         <item>安康</item>
-        <item>北京首都</item>
-        <item>北京南苑</item>
+        <item>北京</item>
         <item>保山</item>
         <item>包头</item>
         <item>北海</item>
@@ -295,8 +289,7 @@
         <item>庆阳</item>
         <item>沈阳</item>
         <item>深圳</item>
-        <item>上海虹桥</item>
-        <item>上海浦东</item>
+        <item>上海</item>
         <item>汕头</item>
         <item>石家庄</item>
         <item>苏州</item>
@@ -311,7 +304,6 @@
         <item>铜仁</item>
         <item>温州</item>
         <item>武汉</item>
-        <item>武汉王家</item>
         <item>无锡</item>
         <item>乌鲁木齐</item>
         <item>威海</item>

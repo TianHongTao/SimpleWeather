@@ -29,8 +29,8 @@ public class CityActivity extends AppCompatActivity {
 
         String cityTag[] = {"热门", "A", "B", "C", "D", "E", "F", "G", "H", "J",
                 "K", "L", "M", "N", "Q", "S", "T", "W", "X", "Y", "Z"};
-        int listsize[] = {0, 19, 5, 6, 9, 7, 1, 3, 6, 13, 13, 5, 8, 5, 7, 7,
-                10, 6, 11, 7, 11, 9};
+        int listsize[] = {0, 18, 5, 5, 9, 7, 1, 3, 6, 13, 13, 5, 7, 5, 7, 7,
+                9, 6, 10, 7, 11, 9};
 
         for (int j = 1; j < listsize.length; j++) {
             list.add(cityTag[j - 1]);
@@ -94,7 +94,6 @@ public class CityActivity extends AppCompatActivity {
             }
         });
         listView.setAdapter(adapter);
-
 
     }
 }
