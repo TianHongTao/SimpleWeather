@@ -276,6 +276,8 @@ public class MainActivity extends AppCompatActivity implements
         switch (requestCode) {
             case 0:
                 System.out.println("Got city: " + city);
+                ForecastFragment forecastFragment = (ForecastFragment) this.getSupportFragmentManager().findFragmentByTag(TAG_HOME);
+                forecastFragment.ChooseCity(city);
                 break;
             case 2:
                 break;

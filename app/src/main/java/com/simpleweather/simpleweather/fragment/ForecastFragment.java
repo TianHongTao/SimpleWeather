@@ -139,7 +139,7 @@ public class ForecastFragment extends Fragment {
                         Log.e("Map", "Location changed : Lat: " + location.getLatitude() + " Lng: " + location.getLongitude());
                         latitude = location.getLatitude(); // 经度
                         longitude = location.getLongitude(); // 纬度
-                        ChooseCity("上海");
+//                        ChooseCity("上海");
                         new Thread(networkTask).start();
                     }
                 }
