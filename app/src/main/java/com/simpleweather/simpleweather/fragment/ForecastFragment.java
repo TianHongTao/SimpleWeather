@@ -257,11 +257,11 @@ public class ForecastFragment extends Fragment {
             StringBuilder stringBuilder = new StringBuilder();
             try {
                 // 定义获取文件内容的URL
-                URL myURL = new URL("http://api.map.baidu.com/geocoder?output=json&location="
+                URL myURL = new URL("https://api.map.baidu.com/geocoder?output=json&location="
                         +latitude+","+longitude+"&ak=esNPFDwwsXWtsQfw4NMNmur1");
                 // 打开URL链接
                 HttpURLConnection ucon = (HttpURLConnection)myURL.openConnection();
-                System.out.println("http://api.map.baidu.com/geocoder?output=json&location="
+                System.out.println("https://api.map.baidu.com/geocoder?output=json&location="
                         +latitude+","+longitude+"&ak=esNPFDwwsXWtsQfw4NMNmur1");
                 int c = ucon.getResponseCode();
                 // 使用InputStream，从URLConnection读取数据
