@@ -67,6 +67,8 @@ public class ForecastFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     private LocationManager locationManager;
+    private boolean is_choose = false;
+    private String city = "";
     private double latitude = 39.913542;
     private double longitude = 116.379;
     private TextView info1 = null;
@@ -75,6 +77,11 @@ public class ForecastFragment extends Fragment {
     ImageView background = null;
     View F_view = null;
     Weather WInfo = new Weather();
+
+    public void ChooseCity(String city) {
+        this.city = city;
+        is_choose = true;
+    }
 
     public ForecastFragment() {
         // Required empty public constructor
@@ -101,7 +108,6 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -129,10 +135,11 @@ public class ForecastFragment extends Fragment {
                 // 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
                 @Override
                 public void onLocationChanged(Location location) {
-                    if (location != null) {
+                    if (location != null && is_choose == false) {
                         Log.e("Map", "Location changed : Lat: " + location.getLatitude() + " Lng: " + location.getLongitude());
                         latitude = location.getLatitude(); // 经度
                         longitude = location.getLongitude(); // 纬度
+                        ChooseCity("上海");
                         new Thread(networkTask).start();
                     }
                 }
@@ -143,7 +150,7 @@ public class ForecastFragment extends Fragment {
                 Log.d("str", "== in android 6.0, getting permission");
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1000, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5000, locationListener);
             String locationProvider = LocationManager.GPS_PROVIDER;
             Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
             new Thread(networkTask).start();
@@ -256,6 +263,41 @@ public class ForecastFragment extends Fragment {
      * 网络操作相关的子线程
      */
     Runnable networkTask = new Runnable() {
+
+        private void get_coordinate(String city) {
+            try {
+                // 定义获取文件内容的URL
+                URL myURL = new URL("http://api.map.baidu.com/geocoder?address=" + city +
+                        "&output=json&key=37492c0ee6f924cb5e934fa08c6b167");
+                // 打开URL链接
+                HttpURLConnection ucon = (HttpURLConnection) myURL.openConnection();
+                System.out.println("http://api.map.baidu.com/geocoder?address=" + city +
+                        "&output=json&key=37492c0ee6f924cb5e934fa08c6b167");
+                int c = ucon.getResponseCode();
+                // 使用InputStream，从URLConnection读取数据
+                if (ucon.getResponseCode() == 200) {
+                    InputStream is = ucon.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+                    String temp = null;
+                    while ((temp = br.readLine()) != null) {
+                        if (temp.indexOf("lng") != -1) {
+                            longitude = Double.valueOf(temp.substring(temp.indexOf(":") + 1, temp.length() - 2));
+                        }
+                        if (temp.indexOf("lat") != -1) {
+                            latitude = Double.valueOf(temp.substring(temp.indexOf(":") + 1, temp.length() - 2));
+                        }
+                    }
+                } else {
+                    Log.e("NetWork", "Get Coordinate NetWork ERRO！");
+                }
+                // 用ByteArrayBuffer缓存
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         private String getCity(String latitude,String longitude) throws IOException {
             StringBuilder stringBuilder = new StringBuilder();
             try {
@@ -474,7 +516,14 @@ public class ForecastFragment extends Fragment {
             Message msg = new Message();
             Bundle data = new Bundle();
             try{
-                data.putString("city", getCity(String.valueOf(latitude),String.valueOf(longitude)));
+                if (is_choose == false) {
+                    data.putString("city", getCity(String.valueOf(latitude), String.valueOf(longitude)));
+                    msg.setData(data);
+                } else {
+                    get_coordinate(city);
+                    data.putString("city", city);
+                    msg.setData(data);
+                }
                 Log.e("str","wait");
                 getWeather(String.valueOf(latitude),String.valueOf(longitude));getWeatherforecast(String.valueOf(latitude),String.valueOf(longitude));
                 msg.setData(data);
