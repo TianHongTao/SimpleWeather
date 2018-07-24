@@ -259,7 +259,22 @@ public class MainActivity extends AppCompatActivity implements
     }
     public void selectCity(){
         Intent intent = new Intent(this, CityActivity.class);
-        intent.putExtra(CURRENT_CITY,"北京");
-        startActivity(intent);
+        intent.putExtra(CURRENT_CITY,"北京");//TODO: read city setting
+        startActivityForResult(intent, 0);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String city = data.getStringExtra(CityActivity.RESPONSE_CITY);
+        switch (requestCode) {
+            case 0:
+                System.out.println("Got city: " + city);
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
+    }
+
 }
