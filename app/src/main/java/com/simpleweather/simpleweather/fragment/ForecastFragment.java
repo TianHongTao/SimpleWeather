@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -42,6 +43,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Connection;
 import java.text.DecimalFormat;
 
 /**
@@ -237,7 +239,8 @@ public class ForecastFragment extends Fragment {
                 D_infos.append("湿度"+String.valueOf(HWInfo.getHumidity())+"°\n");
                 D_infos.append("风向"+String.valueOf(HWInfo.getDirection())+"°\n");
                 D_infos.append("风速"+String.valueOf(HWInfo.getSpeed())+"°\n");
-                TextView T = new TextView(getActivity());
+
+                TextView T = new TextView(linearLayout.getContext());
                 T.setText(D_infos.toString());
                 T.setTextSize(TypedValue.COMPLEX_UNIT_DIP,12);
                 T.setTextColor(Color.parseColor("#FDFDFD"));
