@@ -13,29 +13,45 @@ public class DailyWeatherInfo {
     private double[] speed;
     private double[] humidity;
 
-    public String get_skycon_CN(String info)
-    {
-        switch (info)
-        {
-            case "CLEAR_DAY" : info = "晴天"; break;
-            case "CLEAR_NIGHT" : info = "晴夜"; break;
-            case "PARTLY_CLOUDY_DAY" : info = "多云天"; break;
-            case "PARTLY_CLOUDY_NIGHT" : info = "多云夜"; break;
-            case "CLOUDY" : info = "阴"; break;
-            case "RAIN" : info = "雨"; break;
-            case "SNOW" : info = "雪"; break;
-            case "WIND" : info = "风"; break;
-            case "HAZE" : info = "雾霾沙尘"; break;
-            default: info = "NONE";
+    public String get_skycon_CN(String info) {
+        switch (info) {
+            case "CLEAR_DAY":
+                info = "晴天";
+                break;
+            case "CLEAR_NIGHT":
+                info = "晴夜";
+                break;
+            case "PARTLY_CLOUDY_DAY":
+                info = "多云天";
+                break;
+            case "PARTLY_CLOUDY_NIGHT":
+                info = "多云夜";
+                break;
+            case "CLOUDY":
+                info = "阴";
+                break;
+            case "RAIN":
+                info = "雨";
+                break;
+            case "SNOW":
+                info = "雪";
+                break;
+            case "WIND":
+                info = "风";
+                break;
+            case "HAZE":
+                info = "雾霾沙尘";
+                break;
+            default:
+                info = "NONE";
         }
         return info;
     }
 
-    public DailyWeatherInfo(){
+    public DailyWeatherInfo() {
         this.date = "";
         this.sunsetTime = new String[2];
-        for(int i=0;i<2;i++)
-        {
+        for (int i = 0; i < 2; i++) {
             sunsetTime[i] = "";
         }
         this.temperature = new double[3];
@@ -47,8 +63,7 @@ public class DailyWeatherInfo {
         this.direction = new double[3];
         this.speed = new double[3];
         this.humidity = new double[3];
-        for(int i=0; i<3; i++)
-        {
+        for (int i = 0; i < 3; i++) {
             speed[i] = 0.0;
             direction[i] = 0.0;
             temperature[i] = 0.0;
@@ -62,7 +77,7 @@ public class DailyWeatherInfo {
 
     public DailyWeatherInfo(String date, String[] sunsetTime, double[] temperature, double[] pm25,
                             String skycon, double[] cloudrate, double[] aqi, double[] precipitation,
-                            double[] direction, double[] speed, double[] humidity){
+                            double[] direction, double[] speed, double[] humidity) {
         this.date = date;
         this.sunsetTime = sunsetTime;
         this.temperature = temperature;
@@ -167,66 +182,57 @@ public class DailyWeatherInfo {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(date+" ");
-        for(int i=0; i<sunsetTime.length; i++)
-        {
+        stringBuilder.append(date + " ");
+        for (int i = 0; i < sunsetTime.length; i++) {
             stringBuilder.append(sunsetTime[i]);
             stringBuilder.append(" ");
         }
 
         stringBuilder.append("\n");
-        for(int i=0;i<temperature.length;i++)
-        {
+        for (int i = 0; i < temperature.length; i++) {
             stringBuilder.append(temperature[i]);
             stringBuilder.append(" ");
         }
 
         stringBuilder.append("\n");
-        for(int i=0;i<pm25.length;i++)
-        {
+        for (int i = 0; i < pm25.length; i++) {
             stringBuilder.append(pm25[i]);
             stringBuilder.append(" ");
         }
         stringBuilder.append(skycon);
         stringBuilder.append("\n");
 
-        for(int i=0;i<cloudrate.length;i++)
-        {
+        for (int i = 0; i < cloudrate.length; i++) {
             stringBuilder.append(cloudrate[i]);
             stringBuilder.append(" ");
         }
         stringBuilder.append("\n");
 
-        for(int i=0;i<aqi.length;i++)
-        {
+        for (int i = 0; i < aqi.length; i++) {
             stringBuilder.append(aqi[i]);
             stringBuilder.append(" ");
         }
         stringBuilder.append("\n");
 
-        for(int i=0;i<precipitation.length;i++)
-        {
+        for (int i = 0; i < precipitation.length; i++) {
             stringBuilder.append(precipitation[i]);
             stringBuilder.append(" ");
         }
         stringBuilder.append("\n");
 
-        for(int i=0;i<direction.length;i++)
-        {
+        for (int i = 0; i < direction.length; i++) {
             stringBuilder.append(direction[i]);
             stringBuilder.append(" ");
         }
         stringBuilder.append("\n");
 
-        for(int i=0;i<speed.length;i++)
-        {
+        for (int i = 0; i < speed.length; i++) {
             stringBuilder.append(speed[i]);
             stringBuilder.append(" ");
         }
         stringBuilder.append("\n");
 
-        for(int i=0;i<humidity.length;i++)
-        {
+        for (int i = 0; i < humidity.length; i++) {
             stringBuilder.append(humidity[i]);
             stringBuilder.append(" ");
         }

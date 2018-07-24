@@ -16,14 +16,14 @@
             android:id="@+id/nav_diary"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/navigation_drawer_diary" />
-        <item
-            android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/navigation_drawer_setting" />
     </group>
 
     <item android:title="Other">
         <menu>
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/navigation_drawer_setting" />
             <item
                 android:id="@+id/nav_about_us"
                 android:icon="@drawable/ic_menu_share"

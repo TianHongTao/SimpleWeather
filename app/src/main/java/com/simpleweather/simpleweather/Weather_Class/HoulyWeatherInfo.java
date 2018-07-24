@@ -17,7 +17,7 @@ public class HoulyWeatherInfo {
     private double temperature; // 温度;
     private String description;
 
-    public  HoulyWeatherInfo(){
+    public HoulyWeatherInfo() {
         this.datetime = "";
         this.description = "";
         this.pm25 = 0.0;
@@ -31,26 +31,43 @@ public class HoulyWeatherInfo {
         this.temperature = 0.0;
     }
 
-    public String get_skycon_CN(String info)
-    {
-        switch (info)
-        {
-            case "CLEAR_DAY" : info = "晴天"; break;
-            case "CLEAR_NIGHT" : info = "晴夜"; break;
-            case "PARTLY_CLOUDY_DAY" : info = "多云天"; break;
-            case "PARTLY_CLOUDY_NIGHT" : info = "多云夜"; break;
-            case "CLOUDY" : info = "阴"; break;
-            case "RAIN" : info = "雨"; break;
-            case "SNOW" : info = "雪"; break;
-            case "WIND" : info = "风"; break;
-            case "HAZE" : info = "雾霾沙尘"; break;
-            default: info = "NONE";
+    public String get_skycon_CN(String info) {
+        switch (info) {
+            case "CLEAR_DAY":
+                info = "晴天";
+                break;
+            case "CLEAR_NIGHT":
+                info = "晴夜";
+                break;
+            case "PARTLY_CLOUDY_DAY":
+                info = "多云天";
+                break;
+            case "PARTLY_CLOUDY_NIGHT":
+                info = "多云夜";
+                break;
+            case "CLOUDY":
+                info = "阴";
+                break;
+            case "RAIN":
+                info = "雨";
+                break;
+            case "SNOW":
+                info = "雪";
+                break;
+            case "WIND":
+                info = "风";
+                break;
+            case "HAZE":
+                info = "雾霾沙尘";
+                break;
+            default:
+                info = "NONE";
         }
         return info;
     }
 
-    public HoulyWeatherInfo(String description,String datetime,double pm25,String skycon,double cloudrate,double aqi
-            ,double humidity,double precipitation,double direction,double speed,double temperature){
+    public HoulyWeatherInfo(String description, String datetime, double pm25, String skycon, double cloudrate, double aqi
+            , double humidity, double precipitation, double direction, double speed, double temperature) {
         this.description = description;
         this.datetime = datetime;
         this.pm25 = pm25;

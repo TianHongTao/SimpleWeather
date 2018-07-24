@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -21,14 +20,12 @@ import com.simpleweather.simpleweather.R;
 import com.simpleweather.simpleweather.fragment.CalendarFragment;
 import com.simpleweather.simpleweather.fragment.DiaryFragment;
 import com.simpleweather.simpleweather.fragment.ForecastFragment;
-import com.simpleweather.simpleweather.fragment.SettingFragment;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         ForecastFragment.OnFragmentInteractionListener,
         CalendarFragment.OnFragmentInteractionListener,
-        DiaryFragment.OnFragmentInteractionListener,
-        SettingFragment.OnFragmentInteractionListener {
+        DiaryFragment.OnFragmentInteractionListener {
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -80,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements
         if (savedInstanceState == null) {
             navItemIndex = 0;
             CURRENT_TAG = TAG_HOME;
-            loadHomeFragment();
+            load();
         }
     }
 
@@ -97,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements
             if (navItemIndex != 0) {
                 navItemIndex = 0;
                 CURRENT_TAG = TAG_HOME;
-                loadHomeFragment();
+                load();
                 return;
             }
 
@@ -114,24 +111,43 @@ public class MainActivity extends AppCompatActivity implements
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
-    private void loadHomeFragment() {
+    private void load() {
         // selecting appropriate nav menu item
-        selectNavMenu();
+//        selectNavMenu();
+        switch (navItemIndex) {
+            case 0:
+            case 1:
+            case 2:
+                loadFragment();
+                break;
+            case 3:
+                Intent intentSetting = new Intent(this, SettingsActivity.class);
+                startActivity(intentSetting);
+                break;
+            case 4:
+                Intent intentAbout = new Intent(this, AboutUsActivity.class);
+                startActivity(intentAbout);
+                break;
+            default:
+                break;
+        }
+        loadFragment();
+        // refresh toolbar menu
+        invalidateOptionsMenu();
+    }
 
+    private void loadFragment() {
         // set toolbar title
         setToolbarTitle();
-
         // if user select the current navigation menu again, don't do anything
         // just close the navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
-
             // show or hide the fab button
             toggleFab();
             return;
         }
-
         // Sometimes, when fragment has huge data, screen seems hanging
         // when switching between navigation menus
         // So using runnable, the fragment is loaded with cross fade effect
@@ -151,16 +167,12 @@ public class MainActivity extends AppCompatActivity implements
 
         // If mPendingRunnable is not null, then add to the message queue
         mHandler.post(mPendingRunnable);
-
         // show or hide the fab button
         toggleFab();
-
         //Closing drawer on item click
         drawer.closeDrawers();
-
-        // refresh toolbar menu
-        invalidateOptionsMenu();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -221,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements
         }
         item.setChecked(true);
 
-        loadHomeFragment();
+        load();
         return true;
     }
 
@@ -236,18 +248,12 @@ public class MainActivity extends AppCompatActivity implements
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                // home
                 return new ForecastFragment();
             case 1:
-                // photos
                 return new CalendarFragment();
             case 2:
-                // movies fragment
                 return new DiaryFragment();
-            case 3:
-                // notifications fragment
-                return new SettingFragment();
-            //TODO:case 4
+
             default:
                 return new ForecastFragment();
         }
@@ -257,9 +263,10 @@ public class MainActivity extends AppCompatActivity implements
     public void onFragmentInteraction(Uri uri) {
 
     }
-    public void selectCity(){
+
+    public void selectCity() {
         Intent intent = new Intent(this, CityActivity.class);
-        intent.putExtra(CURRENT_CITY,"北京");//TODO: read city setting
+        intent.putExtra(CURRENT_CITY, "北京");//TODO: read city setting
         startActivityForResult(intent, 0);
     }
 
