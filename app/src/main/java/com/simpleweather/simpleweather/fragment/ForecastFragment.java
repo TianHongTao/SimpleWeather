@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +68,9 @@ public class ForecastFragment extends Fragment {
     private double latitude = 39.913542;
     private double longitude = 116.379;
     private TextView info1 = null;
-    HorizontalScrollView horizontalScrollView = null;
+    HorizontalScrollView horizontalScrollView=null;
+    ImageView icon = null;
+    ImageView background = null;
     View F_view = null;
     Weather WInfo = new Weather();
 
@@ -132,33 +136,50 @@ public class ForecastFragment extends Fragment {
                 }
             };
             //TODO GPS FIRST LOGIN WILL EXIT(1);
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
                 Log.d("str", "== in android 6.0, getting permission");
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1000, locationListener);
             String locationProvider = LocationManager.GPS_PROVIDER;
             Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
             new Thread(networkTask).start();
         } else {
-            Log.e("str", "获取失败");
+            Log.e("str","获取失败");
         }
     }
 
-    public void set_Dinfo(int i) {
+    public void set_Dinfo(int i){
         DailyWeatherInfo DWInfo = WInfo.getDailyWeatherInfo(i);
         StringBuilder D_infos = new StringBuilder();
-        D_infos.append("日期" + DWInfo.getDate() + "\n");
-        D_infos.append("降水" + String.valueOf(Math.floor(DWInfo.getPrecipitation()[1] * 100)) + "%\n");
-        D_infos.append("天气 " + DWInfo.getSkycon() + "\n");
-        D_infos.append("AQI" + String.valueOf(DWInfo.getAqi()[1]) + "°\n");
-        D_infos.append("高温" + String.valueOf(DWInfo.getTemperature()[0]) + "°\n");
-        D_infos.append("低温" + String.valueOf(DWInfo.getTemperature()[1]) + "°\n");
-        D_infos.append("日出" + String.valueOf(DWInfo.getSunsetTime()[0]) + "°\n");
-        D_infos.append("日落" + String.valueOf(DWInfo.getSunsetTime()[1]) + "°\n");
+        DecimalFormat df = new DecimalFormat("0.00");
+        D_infos.append("日期"+DWInfo.getDate()+"\n");
+        D_infos.append("降水"+String.valueOf(df.format(DWInfo.getPrecipitation()[1]*100))+"%\n");
+        D_infos.append("天气 "+DWInfo.getSkycon()+"\n");
+        D_infos.append("AQI"+String.valueOf(DWInfo.getAqi()[1])+"°\n");
+        D_infos.append("高温"+String.valueOf(DWInfo.getTemperature()[0])+"°\n");
+        D_infos.append("低温"+String.valueOf(DWInfo.getTemperature()[1])+"°\n");
+        D_infos.append("日出"+String.valueOf(DWInfo.getSunsetTime()[0])+"°\n");
+        D_infos.append("日落"+String.valueOf(DWInfo.getSunsetTime()[1])+"°\n");
         info1.setText(D_infos.toString());
         return;
+    }
+
+    public void choos_Icon(String skycon){
+        switch (skycon)
+        {
+            case "晴天" :icon.setImageResource(R.drawable.ic_sun); ; break;
+            case "晴夜" :icon.setImageResource(R.drawable.ic_sun_night) ; break;
+            case "多云天" :icon.setImageResource(R.drawable.ic_partlycloudy) ; break;
+            case "多云夜" :icon.setImageResource(R.drawable.ic_partlycloudy_night) ; break;
+            case "阴" :icon.setImageResource(R.drawable.ic_cloudy) ; break;
+            case "雨" :icon.setImageResource(R.drawable.ic_rain) ; break;
+            case "雪" :icon.setImageResource(R.drawable.ic_snow) ; break;
+            case "风" :icon.setImageResource(R.drawable.ic_wind) ; break;
+            case "雾霾沙尘" :icon.setImageResource(R.drawable.ic_smog) ; break;
+            default:icon.setImageResource(R.drawable.ic_none) ;
+        }
     }
 
     Handler handler = new Handler() {
@@ -168,7 +189,7 @@ public class ForecastFragment extends Fragment {
             Bundle data = msg.getData();
             String val = data.getString("city");
             Log.i("mylog", "请求结果为-->" + val);
-            val = val.replace(":\"", " ");
+            val = val.replace(":\""," ");
 
             // UI界面的更新等相关操作
             info1 = F_view.findViewById(R.id.location);
@@ -190,37 +211,41 @@ public class ForecastFragment extends Fragment {
             set_Dinfo(3);
             info1 = F_view.findViewById(R.id.fourth_day);
             set_Dinfo(4);
+            DecimalFormat df = new DecimalFormat("0.00");
             info1 = F_view.findViewById(R.id.pm25);
             info1.setText(String.valueOf(now.getPm25()));
             info1 = F_view.findViewById(R.id.humidity);
-            info1.setText(String.valueOf(now.getHumidity() * 100) + "%");
+            info1.setText(String.valueOf(df.format(now.getHumidity()*100))+"%");
             info1 = F_view.findViewById(R.id.intensity);
-            info1.setText(String.valueOf(now.getIntensity_l() * 100) + "%");
+            info1.setText(String.valueOf(df.format(now.getIntensity_l()*100))+"%");
             info1 = F_view.findViewById(R.id.direction);
             info1.setText(String.valueOf(now.getDirection()));
             info1 = F_view.findViewById(R.id.speed);
             info1.setText(String.valueOf(now.getSpeed()));
             horizontalScrollView = F_view.findViewById(R.id.hourly_info);
             LinearLayout linearLayout = horizontalScrollView.findViewById(R.id.hourly_info_layout);
-            for (int i = 0; i < 48; i++) {
+            for(int i=0;i<48;i++)
+            {
                 HoulyWeatherInfo HWInfo = WInfo.getHourlyWeatherInfo(i);
                 StringBuilder D_infos = new StringBuilder();
-                D_infos.append("日期\n" + HWInfo.getDatetime() + "\n");
-                D_infos.append("降水" + String.valueOf(Math.floor(HWInfo.getPrecipitation() * 100)) + "%\n");
-                D_infos.append("天气 " + HWInfo.getSkycon() + "\n");
-                D_infos.append("AQI" + String.valueOf(HWInfo.getAqi()) + "°\n");
-                D_infos.append("云量" + String.valueOf(HWInfo.getCloudrate()) + "°\n");
-                D_infos.append("温度" + String.valueOf(HWInfo.getTemperature()) + "°\n");
-                D_infos.append("湿度" + String.valueOf(HWInfo.getHumidity()) + "°\n");
-                D_infos.append("风向" + String.valueOf(HWInfo.getDirection()) + "°\n");
-                D_infos.append("风速" + String.valueOf(HWInfo.getSpeed()) + "°\n");
+                D_infos.append("日期\n"+HWInfo.getDatetime()+"\n");
+                D_infos.append("降水"+String.valueOf(df.format(HWInfo.getPrecipitation()*100))+"%\n");
+                D_infos.append("天气 "+HWInfo.getSkycon()+"\n");
+                D_infos.append("AQI"+String.valueOf(HWInfo.getAqi())+"°\n");
+                D_infos.append("云量"+String.valueOf(HWInfo.getCloudrate())+"°\n");
+                D_infos.append("温度"+String.valueOf(HWInfo.getTemperature())+"°\n");
+                D_infos.append("湿度"+String.valueOf(HWInfo.getHumidity())+"°\n");
+                D_infos.append("风向"+String.valueOf(HWInfo.getDirection())+"°\n");
+                D_infos.append("风速"+String.valueOf(HWInfo.getSpeed())+"°\n");
                 TextView T = new TextView(getActivity());
                 T.setText(D_infos.toString());
-                T.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+                T.setTextSize(TypedValue.COMPLEX_UNIT_DIP,12);
                 T.setTextColor(Color.parseColor("#FDFDFD"));
                 T.setGravity(Gravity.CENTER);
                 linearLayout.addView(T);
             }
+            icon = F_view.findViewById(R.id.icon);
+            choos_Icon(now.getSkycon());
         }
     };
 
@@ -228,52 +253,61 @@ public class ForecastFragment extends Fragment {
      * 网络操作相关的子线程
      */
     Runnable networkTask = new Runnable() {
-        private String getCity(String latitude, String longitude) throws IOException {
+        private String getCity(String latitude,String longitude) throws IOException {
             StringBuilder stringBuilder = new StringBuilder();
             try {
                 // 定义获取文件内容的URL
                 URL myURL = new URL("http://api.map.baidu.com/geocoder?output=json&location="
-                        + latitude + "," + longitude + "&ak=esNPFDwwsXWtsQfw4NMNmur1");
+                        +latitude+","+longitude+"&ak=esNPFDwwsXWtsQfw4NMNmur1");
                 // 打开URL链接
-                HttpURLConnection ucon = (HttpURLConnection) myURL.openConnection();
+                HttpURLConnection ucon = (HttpURLConnection)myURL.openConnection();
                 System.out.println("http://api.map.baidu.com/geocoder?output=json&location="
-                        + latitude + "," + longitude + "&ak=esNPFDwwsXWtsQfw4NMNmur1");
+                        +latitude+","+longitude+"&ak=esNPFDwwsXWtsQfw4NMNmur1");
                 int c = ucon.getResponseCode();
                 // 使用InputStream，从URLConnection读取数据
-                if (ucon.getResponseCode() == 200) {
+                if(ucon.getResponseCode() == 200)
+                {
                     InputStream is = ucon.getInputStream();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is,"utf-8"));
                     String temp = null;
-                    while ((temp = br.readLine()) != null) {
-                        if (temp.contains("city")) {
-                            temp = temp.substring(temp.indexOf(":\""), temp.lastIndexOf('"'));
-                            stringBuilder.append(temp + " ");
-                        } else if (temp.contains("district")) {
-                            temp = temp.substring(temp.indexOf(":\""), temp.lastIndexOf('"'));
+                    while((temp = br.readLine())!=null)
+                    {
+                        if(temp.contains("city"))
+                        {
+                            temp = temp.substring(temp.indexOf(":\""),temp.lastIndexOf('"'));
+                            stringBuilder.append(temp+" ");
+                        }else if(temp.contains("district"))
+                        {
+                            temp = temp.substring(temp.indexOf(":\""),temp.lastIndexOf('"'));
                             stringBuilder.append(temp);
                             break;
                         }
                     }
-                } else {
-                    Log.e("NetWork", "Get City NetWork ERRO！");
+                }
+                else
+                {
+                    Log.e("NetWork","Get City NetWork ERRO！");
                 }
                 // 用ByteArrayBuffer缓存
-            } catch (MalformedURLException e) {
+            }catch (MalformedURLException e)
+            {
                 e.printStackTrace();
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
             return stringBuilder.toString();
         }
 
 
-        private void getWeather(String latitude, String longitude) {
+        private void getWeather(String latitude,String longitude){
             try {
                 String temp;
-                URL url = new URL("https://api.caiyunapp.com/v2/gAC7WmaahV0uV8FW/" + longitude + "," + latitude + "/realtime.jsonp");
+                URL url = new URL("https://api.caiyunapp.com/v2/gAC7WmaahV0uV8FW/"+longitude+","+latitude+"/realtime.jsonp");
                 URLConnection con = url.openConnection();
                 InputStream is = con.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+                BufferedReader br = new BufferedReader(new InputStreamReader(is,"utf-8"));
                 temp = br.readLine();
                 JSONObject jsonObject = new JSONObject(temp);
                 String result = jsonObject.optString("result");
@@ -308,25 +342,26 @@ public class ForecastFragment extends Fragment {
                 double direction = jsonObject.optDouble("direction");
                 double speed = jsonObject.optDouble("speed");
 
-                WInfo.setNowWeatherInfo(temperature, skycon, pm25, cloudrate, humidity, distance,
-                        intensity_n, intensity_l, direction, speed);
+                WInfo.setNowWeatherInfo(temperature,skycon,pm25,cloudrate,humidity,distance,
+                        intensity_n,intensity_l, direction,speed);
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
+            }catch (IOException e)
+            {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        private void getWeatherforecast(String latitude, String longitude) {
+        private void getWeatherforecast(String latitude,String longitude){
             try {
                 String temp;
-                URL url = new URL("https://api.caiyunapp.com/v2/gAC7WmaahV0uV8FW/" + longitude + "," + latitude + "/forecast.jsonp");
+                URL url = new URL("https://api.caiyunapp.com/v2/gAC7WmaahV0uV8FW/"+longitude+","+latitude+"/forecast.jsonp");
                 URLConnection con = url.openConnection();
                 InputStream is = con.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+                BufferedReader br = new BufferedReader(new InputStreamReader(is,"utf-8"));
                 temp = br.readLine();
                 JSONObject jsonObject = new JSONObject(temp);
                 String result = jsonObject.optString("result");
@@ -347,7 +382,8 @@ public class ForecastFragment extends Fragment {
                 JSONArray temperature = new JSONArray(jsonObject.optString("temperature"));
 
                 HoulyWeatherInfo[] HWInfo = new HoulyWeatherInfo[48];
-                for (int i = 0; i < HWInfo.length; i++) {
+                for(int i=0; i<HWInfo.length; i++)
+                {
                     String datetime = pm25.getJSONObject(i).optString("datetime");
                     double s_pm25 = pm25.getJSONObject(i).optDouble("value");
                     String s_skycon = skycon.getJSONObject(i).optString("value");
@@ -358,8 +394,8 @@ public class ForecastFragment extends Fragment {
                     double s_temperature = temperature.getJSONObject(i).optDouble("value");
                     double s_direction = wind.getJSONObject(i).optDouble("direction");
                     double s_speed = wind.getJSONObject(i).optDouble("speed");
-                    HWInfo[i] = new HoulyWeatherInfo(description, datetime, s_pm25, s_skycon, s_cloudrate, s_aqi
-                            , s_humidity, s_precipitation, s_direction, s_speed, s_temperature);
+                    HWInfo[i] = new HoulyWeatherInfo(description,datetime,s_pm25,s_skycon,s_cloudrate,s_aqi
+                            ,s_humidity,s_precipitation,s_direction,s_speed,s_temperature);
                 }
                 WInfo.setHourlyWeatherInfo(HWInfo);
 
@@ -376,7 +412,8 @@ public class ForecastFragment extends Fragment {
                 humidity = new JSONArray(jsonObject.optString("humidity"));
 
                 DailyWeatherInfo[] DWInfo = new DailyWeatherInfo[5];
-                for (int i = 0; i < DWInfo.length; i++) {
+                for (int i=0; i<DWInfo.length; i++)
+                {
                     String[] sunsetTime = new String[2];
                     sunsetTime[0] = astro.getJSONObject(i).optJSONObject("sunset").optString("time");
                     sunsetTime[1] = astro.getJSONObject(i).optJSONObject("sunrise").optString("time");
@@ -420,7 +457,8 @@ public class ForecastFragment extends Fragment {
                 WInfo.setDailyWeatherInfo(DWInfo);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
+            }catch (IOException e)
+            {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -432,14 +470,14 @@ public class ForecastFragment extends Fragment {
             // 在这里进行 http request.网络请求相关操作
             Message msg = new Message();
             Bundle data = new Bundle();
-            try {
-                data.putString("city", getCity(String.valueOf(latitude), String.valueOf(longitude)));
-                Log.e("str", "wait");
-                getWeather(String.valueOf(latitude), String.valueOf(longitude));
-                getWeatherforecast(String.valueOf(latitude), String.valueOf(longitude));
+            try{
+                data.putString("city", getCity(String.valueOf(latitude),String.valueOf(longitude)));
+                Log.e("str","wait");
+                getWeather(String.valueOf(latitude),String.valueOf(longitude));getWeatherforecast(String.valueOf(latitude),String.valueOf(longitude));
                 msg.setData(data);
                 handler.sendMessage(msg);
-            } catch (IOException e) {
+            }catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -456,8 +494,7 @@ public class ForecastFragment extends Fragment {
            //决定何时停止更新位置信息
            locationManager.removeUpdates(locationListener);
 
-   */
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+   */public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.
