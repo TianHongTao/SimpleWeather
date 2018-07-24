@@ -80,7 +80,9 @@ public class CityActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String currentCity = intent.getStringExtra(MainActivity.CURRENT_CITY);
 
-        getData();
+        if (list.isEmpty()) {
+            getData();
+        }
         CityListAdapter adapter = new CityListAdapter(this, list, listTag);
         final ListView listView = findViewById(R.id.group_list);
 
@@ -89,7 +91,7 @@ public class CityActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent();
                 intent.putExtra(RESPONSE_CITY, CityActivity.list.get(i));
-                CityActivity.this.setResult(0,intent);
+                CityActivity.this.setResult(0, intent);
                 CityActivity.this.finish();
             }
         });
