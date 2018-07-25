@@ -388,12 +388,10 @@ public class ForecastFragment extends Fragment {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-                v
                 e.printStackTrace();
             }
             return stringBuilder.toString();
         }
-
 
         private void getWeather(String latitude, String longitude) {
             try {
