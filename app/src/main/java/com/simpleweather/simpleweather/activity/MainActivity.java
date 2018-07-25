@@ -235,12 +235,12 @@ public class MainActivity extends AppCompatActivity implements
                 navItemIndex = 0;
                 break;
         }
-//        if (item.isChecked()) {
-//            item.setChecked(false);
-//        } else {
-//            item.setChecked(true);
-//        }
-        item.setChecked(false);
+        if (id == R.id.nav_forecast) {
+            item.setChecked(true);
+        } else {
+            item.setChecked(false);
+        }
+//        item.setChecked(true);
 
         load();
         return true;
