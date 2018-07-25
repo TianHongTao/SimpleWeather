@@ -40,6 +40,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.simpleweather.simpleweather.activity.MainActivity" />
         </activity>
+
+        <activity
+            android:name=".Calendar.CalendarActivity"
+            android:label="calendar"
+            android:theme="@android:style/Theme.Holo"
+            android:parentActivityName=".activity.MainActivity"></activity>
     </application>
 
 </manifest>

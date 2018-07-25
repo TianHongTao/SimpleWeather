@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.EditTextPreference;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -19,16 +18,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.simpleweather.simpleweather.Calendar.CalendarActivity;
 import com.simpleweather.simpleweather.R;
-import com.simpleweather.simpleweather.fragment.CalendarFragment;
-import com.simpleweather.simpleweather.fragment.DiaryFragment;
 import com.simpleweather.simpleweather.fragment.ForecastFragment;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        ForecastFragment.OnFragmentInteractionListener,
-        CalendarFragment.OnFragmentInteractionListener,
-        DiaryFragment.OnFragmentInteractionListener {
+        ForecastFragment.OnFragmentInteractionListener {
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -36,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements
     // tags used to attach the fragments
     private static final String TAG_HOME = "forecast";
     private static final String TAG_CALENDAR = "calendar";
-    private static final String TAG_DIARY = "diary";
     private static final String TAG_SETTING = "setting";
     private static final String TAG_ABOUT_US = "about us";
 
@@ -53,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements
     public SharedPreferences.Editor prefsEditor;
     private String currentCity = null;
     public DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,9 +128,11 @@ public class MainActivity extends AppCompatActivity implements
 //        selectNavMenu();
         switch (navItemIndex) {
             case 0:
-            case 1:
-            case 2:
                 loadFragment();
+                break;
+            case 1:
+                Intent intentCalendar = new Intent(this, CalendarActivity.class);
+                startActivity(intentCalendar);
                 break;
             case 3:
                 Intent intentSetting = new Intent(this, SettingsActivity.class);
@@ -147,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements
             default:
                 break;
         }
-
+        ;
         drawer.closeDrawers();
         // refresh toolbar menu
         invalidateOptionsMenu();
@@ -225,10 +223,6 @@ public class MainActivity extends AppCompatActivity implements
                 navItemIndex = 1;
                 CURRENT_TAG = TAG_CALENDAR;
                 break;
-            case R.id.nav_diary:
-                navItemIndex = 2;
-                CURRENT_TAG = TAG_DIARY;
-                break;
             case R.id.nav_setting:
                 navItemIndex = 3;
                 CURRENT_TAG = TAG_SETTING;
@@ -241,12 +235,12 @@ public class MainActivity extends AppCompatActivity implements
                 navItemIndex = 0;
                 break;
         }
-        if (item.isChecked()) {
-            item.setChecked(false);
-        } else {
-            item.setChecked(true);
-        }
-        item.setChecked(true);
+//        if (item.isChecked()) {
+//            item.setChecked(false);
+//        } else {
+//            item.setChecked(true);
+//        }
+        item.setChecked(false);
 
         load();
         return true;
@@ -264,10 +258,10 @@ public class MainActivity extends AppCompatActivity implements
         switch (navItemIndex) {
             case 0:
                 return ForecastFragment.newInstance(currentCity);
-            case 1:
-                return new CalendarFragment();
-            case 2:
-                return new DiaryFragment();
+//            case 1:
+//                return new CalendarFragment();
+//            case 2:
+//                return new DiaryFragment();
 
             default:
                 return new ForecastFragment();
