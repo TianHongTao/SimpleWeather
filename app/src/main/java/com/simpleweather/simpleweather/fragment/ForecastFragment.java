@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -73,7 +74,7 @@ public class ForecastFragment extends Fragment {
     private TextView info1 = null;
     HorizontalScrollView horizontalScrollView = null;
     ImageView icon = null;
-    ImageView background = null;
+    Drawable background = null;
     View F_view = null;
     Weather WInfo = new Weather();
 
@@ -163,14 +164,14 @@ public class ForecastFragment extends Fragment {
         DailyWeatherInfo DWInfo = WInfo.getDailyWeatherInfo(i);
         StringBuilder D_infos = new StringBuilder();
         DecimalFormat df = new DecimalFormat("0.00");
-        D_infos.append("日期" + DWInfo.getDate() + "\n");
-        D_infos.append("降水" + String.valueOf(df.format(DWInfo.getPrecipitation()[1] * 100)) + "%\n");
+        D_infos.append("日期\n" + DWInfo.getDate() + "\n");
+        D_infos.append("降水 " + String.valueOf(df.format(DWInfo.getPrecipitation()[1] * 100)) + "%\n");
         D_infos.append("天气 " + DWInfo.getSkycon() + "\n");
-        D_infos.append("AQI" + String.valueOf(DWInfo.getAqi()[1]) + "°\n");
-        D_infos.append("高温" + String.valueOf(DWInfo.getTemperature()[0]) + "°\n");
-        D_infos.append("低温" + String.valueOf(DWInfo.getTemperature()[1]) + "°\n");
-        D_infos.append("日出" + String.valueOf(DWInfo.getSunsetTime()[0]) + "°\n");
-        D_infos.append("日落" + String.valueOf(DWInfo.getSunsetTime()[1]) + "°\n");
+        D_infos.append("AQI " + String.valueOf(DWInfo.getAqi()[1]) + "\n");
+        D_infos.append("高温 " + String.valueOf(DWInfo.getTemperature()[0]) + "°\n");
+        D_infos.append("低温 " + String.valueOf(DWInfo.getTemperature()[1]) + "°\n");
+        D_infos.append("日出 " + String.valueOf(DWInfo.getSunsetTime()[0]) + "\n");
+        D_infos.append("日落 " + String.valueOf(DWInfo.getSunsetTime()[1]) + "\n");
         info1.setText(D_infos.toString());
         return;
     }
@@ -207,6 +208,40 @@ public class ForecastFragment extends Fragment {
                 break;
             default:
                 icon.setImageResource(R.drawable.ic_none);
+        }
+    }
+
+    public void choos_Backgroud(String skycon) {
+        switch (skycon) {
+            case "晴天":
+                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.clear_day);
+                break;
+            case "晴夜":
+                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.clear_night);
+                break;
+            case "多云天":
+                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.partly_cloudy);
+                break;
+            case "多云夜":
+                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.partly_clear_night);
+                break;
+            case "阴":
+                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.cloudy);
+                break;
+            case "雨":
+                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.rain);
+                break;
+            case "雪":
+                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.snow);
+                break;
+            case "风":
+                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.wind);
+                break;
+            case "雾霾沙尘":
+                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.haze);
+                break;
+            default:
+                ;
         }
     }
 
@@ -255,25 +290,29 @@ public class ForecastFragment extends Fragment {
             for (int i = 0; i < 48; i++) {
                 HoulyWeatherInfo HWInfo = WInfo.getHourlyWeatherInfo(i);
                 StringBuilder D_infos = new StringBuilder();
-                D_infos.append("日期\n" + HWInfo.getDatetime() + "\n");
-                D_infos.append("降水" + String.valueOf(df.format(HWInfo.getPrecipitation() * 100)) + "%\n");
+                String string = HWInfo.getDatetime();
+                D_infos.append("\n" + string.substring(0, string.indexOf(" ")) + "\n");
+                D_infos.append(string.substring(string.indexOf(" ")) + "\n");
+                D_infos.append("降水 " + String.valueOf(df.format(HWInfo.getPrecipitation() * 100)) + "%\n");
                 D_infos.append("天气 " + HWInfo.getSkycon() + "\n");
-                D_infos.append("AQI" + String.valueOf(HWInfo.getAqi()) + "°\n");
-                D_infos.append("云量" + String.valueOf(HWInfo.getCloudrate()) + "°\n");
-                D_infos.append("温度" + String.valueOf(HWInfo.getTemperature()) + "°\n");
-                D_infos.append("湿度" + String.valueOf(HWInfo.getHumidity()) + "°\n");
-                D_infos.append("风向" + String.valueOf(HWInfo.getDirection()) + "°\n");
-                D_infos.append("风速" + String.valueOf(HWInfo.getSpeed()) + "°\n");
+                D_infos.append("AQI " + String.valueOf(HWInfo.getAqi()) + "\n");
+                D_infos.append("云量 " + String.valueOf(HWInfo.getCloudrate()) + "\n");
+                D_infos.append("温度 " + String.valueOf(HWInfo.getTemperature()) + "°\n");
+                D_infos.append("湿度 " + String.valueOf(HWInfo.getHumidity()) + "\n");
+                D_infos.append("风向 " + String.valueOf(HWInfo.getDirection()) + "\n");
+                D_infos.append("风速 " + String.valueOf(HWInfo.getSpeed()) + "\n");
 
                 TextView T = new TextView(linearLayout.getContext());
                 T.setText(D_infos.toString());
-                T.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+                T.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 T.setTextColor(Color.parseColor("#FDFDFD"));
                 T.setGravity(Gravity.CENTER);
                 linearLayout.addView(T);
             }
             icon = F_view.findViewById(R.id.icon);
             choos_Icon(now.getSkycon());
+            choos_Backgroud(now.getSkycon());
+
         }
     };
 
@@ -349,6 +388,7 @@ public class ForecastFragment extends Fragment {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                v
                 e.printStackTrace();
             }
             return stringBuilder.toString();

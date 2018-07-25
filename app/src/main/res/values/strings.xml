@@ -13,7 +13,7 @@
     <string name="title_activity_city">CityActivity</string>
     <string name="city_activity_city_select">选择城市</string>
 
-    <string name="temperature">29</string>
+    <string name="temperature">0</string>
     <string name="度">°</string>
     <string name="分割">|</string>
     <string name="daily">未来5日</string>
@@ -25,11 +25,11 @@
     <string name="详细信息">详细信息</string>
     <string name="空气质量">空气质量</string>
     <string name="第三天">第三天</string>
-    <string name="location">北京</string>
-    <string name="info">7月23日,周一16:40</string>
+    <string name="location">XX</string>
+    <string name="info">x月xx日,周X00:00</string>
     <string name="今天">今天</string>
     <string name="多云">多云</string>
-    <string name="description">今天晚间20点后转小雨</string>
+    <string name="description">XXXXXXXXXXX</string>
     <string name="第四天">第四天</string>
     <string name="第五天">第五天</string>
     <string name="第六天">第一天</string>

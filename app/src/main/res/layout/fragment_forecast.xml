@@ -8,8 +8,9 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/r_layout"
         android:layout_width="match_parent"
-        android:layout_height="1000dp"
+        android:layout_height="match_parent"
         android:background="#3186D9"
         tools:context="${relativePackage}.${activityClass}">
 
@@ -22,7 +23,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:text="@string/location"
-            android:textColor="#FDFDFD" />
+            android:textColor="#FDFDFD"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/time"
@@ -68,7 +70,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="@string/description"
-                android:textColor="#FDFDFD" />
+                android:textColor="#FDFDFD"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -89,12 +92,12 @@
                 android:text="@string/详细信息"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textColor="#fff"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="393dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -104,7 +107,7 @@
                     android:gravity="center"
                     android:text="PM25"
                     android:textColor="#fff"
-                    android:textSize="14sp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -122,7 +125,7 @@
                     android:gravity="center"
                     android:text="相对湿度"
                     android:textColor="#fff"
-                    android:textSize="14sp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -141,7 +144,7 @@
                     android:gravity="center"
                     android:text="降水强度"
                     android:textColor="#fff"
-                    android:textSize="14sp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -160,7 +163,7 @@
                     android:gravity="center"
                     android:text="风向"
                     android:textColor="#fff"
-                    android:textSize="14sp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -179,7 +182,7 @@
                     android:gravity="center"
                     android:text="风速"
                     android:textColor="#fff"
-                    android:textSize="14sp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -195,17 +198,18 @@
             <TextView
                 android:id="@+id/textView14"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/daily"
                 android:textColor="#fff"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/daily_info"
                 android:layout_width="match_parent"
-                android:layout_height="128dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -217,7 +221,7 @@
                     android:gravity="center"
                     android:text="@string/今天"
                     android:textColor="#FDFDFD"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/first_day"
@@ -227,7 +231,7 @@
                     android:gravity="center"
                     android:text="@string/第一天"
                     android:textColor="#FDFDFD"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/second_day"
@@ -237,7 +241,7 @@
                     android:gravity="center"
                     android:text="@string/第二天"
                     android:textColor="#FDFDFD"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/third_day"
@@ -247,7 +251,7 @@
                     android:gravity="center"
                     android:text="@string/第三天"
                     android:textColor="#FDFDFD"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/fourth_day"
@@ -257,31 +261,34 @@
                     android:gravity="center"
                     android:text="@string/第四天"
                     android:textColor="#FDFDFD"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/textView13"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/hourly"
                 android:textColor="#fff"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <HorizontalScrollView
                 android:id="@+id/hourly_info"
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1">
 
                 <LinearLayout
                     android:id="@+id/hourly_info_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal" />
+                    android:orientation="horizontal">
+
+                </LinearLayout>
             </HorizontalScrollView>
 
         </LinearLayout>
