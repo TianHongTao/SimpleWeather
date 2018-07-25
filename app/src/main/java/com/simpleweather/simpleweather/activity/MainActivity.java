@@ -20,11 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.simpleweather.simpleweather.Calendar.CalendarActivity;
 import com.simpleweather.simpleweather.R;
+import com.simpleweather.simpleweather.fragment.AboutFragment;
 import com.simpleweather.simpleweather.fragment.ForecastFragment;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        ForecastFragment.OnFragmentInteractionListener {
+        ForecastFragment.OnFragmentInteractionListener,
+        AboutFragment.OnFragmentInteractionListener {
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements
     public SharedPreferences.Editor prefsEditor;
     private String currentCity = null;
     public DrawerLayout drawer;
+    public NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
@@ -128,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements
 //        selectNavMenu();
         switch (navItemIndex) {
             case 0:
+            case 4:
                 loadFragment();
                 break;
             case 1:
@@ -137,10 +141,6 @@ public class MainActivity extends AppCompatActivity implements
             case 3:
                 Intent intentSetting = new Intent(this, SettingsActivity.class);
                 startActivity(intentSetting);
-                break;
-            case 4:
-                Intent intentAbout = new Intent(this, AboutUsActivity.class);
-                startActivity(intentAbout);
                 break;
             default:
                 break;
@@ -235,12 +235,12 @@ public class MainActivity extends AppCompatActivity implements
                 navItemIndex = 0;
                 break;
         }
-        if (id == R.id.nav_forecast) {
-            item.setChecked(true);
-        } else {
-            item.setChecked(false);
+
+        int size = navigationView.getMenu().size();
+        for (int i = 0; i < size; i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
         }
-//        item.setChecked(true);
+        item.setChecked(true);
 
         load();
         return true;
@@ -262,7 +262,8 @@ public class MainActivity extends AppCompatActivity implements
 //                return new CalendarFragment();
 //            case 2:
 //                return new DiaryFragment();
-
+            case 4:
+                return new AboutFragment();
             default:
                 return new ForecastFragment();
         }
