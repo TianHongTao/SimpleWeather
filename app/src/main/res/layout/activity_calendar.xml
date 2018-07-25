@@ -9,8 +9,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#f6f1ea">
+        android:layout_height="53dp"
+        android:background="#303F9F">
 
         <ImageButton
             android:id="@+id/home"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="33dip"
-            android:background="@drawable/home" />
+            android:background="@drawable/ic_arrow_back_black_24dp" />
 
         <ImageButton
             android:id="@+id/btnPreMonth"
@@ -27,7 +27,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="33dip"
             android:layout_toLeftOf="@+id/tvCurrentMonth"
-            android:background="@drawable/ic_before" />
+            android:background="@drawable/ic_arrow_down_left" />
 
         <ImageButton
             android:id="@+id/btnNextMonth"
@@ -36,7 +36,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="33dip"
             android:layout_toRightOf="@+id/tvCurrentMonth"
-            android:background="@drawable/ic_next" />
+            android:background="@drawable/ic_arrow_down_right" />
 
         <TextView
             android:id="@+id/tvCurrentMonth"
@@ -45,7 +45,7 @@
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:text="11月"
-            android:textColor="#323232"
+            android:textColor="@color/white"
             android:textSize="22sp" />
 
     </RelativeLayout>
