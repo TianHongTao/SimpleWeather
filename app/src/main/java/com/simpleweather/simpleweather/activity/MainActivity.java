@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements
     public SharedPreferences prefs;
     public SharedPreferences.Editor prefsEditor;
     private String currentCity = null;
-
+    public DrawerLayout drawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -147,7 +147,8 @@ public class MainActivity extends AppCompatActivity implements
             default:
                 break;
         }
-        loadFragment();
+
+        drawer.closeDrawers();
         // refresh toolbar menu
         invalidateOptionsMenu();
     }
@@ -157,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements
         setToolbarTitle();
         // if user select the current navigation menu again, don't do anything
         // just close the navigation drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
             // show or hide the fab button
@@ -186,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements
         // show or hide the fab button
         toggleFab();
         //Closing drawer on item click
-        drawer.closeDrawers();
     }
 
 
