@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -27,10 +26,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.simpleweather.simpleweather.R;
-import com.simpleweather.simpleweather.Weather_Class.DailyWeatherInfo;
-import com.simpleweather.simpleweather.Weather_Class.HoulyWeatherInfo;
-import com.simpleweather.simpleweather.Weather_Class.Weather;
-import com.simpleweather.simpleweather.Weather_Class.WeatherInfo;
+import com.simpleweather.simpleweather.Weather.DailyWeatherInfo;
+import com.simpleweather.simpleweather.Weather.HoulyWeatherInfo;
+import com.simpleweather.simpleweather.Weather.Weather;
+import com.simpleweather.simpleweather.Weather.WeatherInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +43,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.Connection;
 import java.text.DecimalFormat;
 
 /**
