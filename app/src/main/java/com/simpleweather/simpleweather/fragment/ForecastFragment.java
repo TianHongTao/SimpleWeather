@@ -264,9 +264,9 @@ public class ForecastFragment extends Fragment {
             info1.setText(WInfo.getHourlyWeatherInfo(0).getDescription());
             info1 = F_view.findViewById(R.id.aqi);
             info1.setText(String.valueOf(WInfo.getHourlyWeatherInfo(0).getAqi()));
-            info1 = F_view.findViewById(R.id.sun_set);
-            info1.setText(String.valueOf(WInfo.getDailyWeatherInfo(0).getSunsetTime()[0]));
             info1 = F_view.findViewById(R.id.sun_rise);
+            info1.setText(String.valueOf(WInfo.getDailyWeatherInfo(0).getSunsetTime()[0]));
+            info1 = F_view.findViewById(R.id.sun_set);
             info1.setText(String.valueOf(WInfo.getDailyWeatherInfo(0).getSunsetTime()[1]));
             info1 = F_view.findViewById(R.id.today);
             set_Dinfo(0);
