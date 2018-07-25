@@ -39,7 +39,7 @@
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">通用</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact based on your message
@@ -47,7 +47,7 @@
     </string>
 
     <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
+    <string name="pref_default_display_name">北京</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
@@ -62,16 +62,16 @@
     </string-array>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
+    <string name="pref_header_data_sync">数据同步</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string name="pref_title_sync_frequency">同步频率</string>
     <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
+        <item>15 分钟</item>
+        <item>30 分钟</item>
+        <item>1 小时</item>
+        <item>3 小时</item>
+        <item>6 小时</item>
+        <item>从不</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
         <item>15</item>
@@ -96,15 +96,7 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
+    <string name="pref_title_system_sync_settings">系统同步设置</string>
+    <string name="city_value">选择城市</string>
 
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
 </resources>

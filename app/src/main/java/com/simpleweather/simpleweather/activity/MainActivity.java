@@ -1,9 +1,12 @@
 package com.simpleweather.simpleweather.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.EditTextPreference;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -45,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
     public static final String CURRENT_CITY = "com.simpleweather.simpleweather.CURRENT_CITY";
+    public static final String CURRENT_CITY_KEY = "current_city";
+    public SharedPreferences prefs;
+    public SharedPreferences.Editor prefsEditor;
+    private String currentCity = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,13 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefsEditor = prefs.edit();
+
+        currentCity = prefs.getString(CURRENT_CITY_KEY, "北京");
+
         mHandler = new Handler();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -79,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements
             CURRENT_TAG = TAG_HOME;
             load();
         }
+//        forecastFragment.ChooseCity(currentCity);
+
     }
 
     @Override
@@ -248,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                return new ForecastFragment();
+                return ForecastFragment.newInstance(currentCity);
             case 1:
                 return new CalendarFragment();
             case 2:
@@ -257,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements
             default:
                 return new ForecastFragment();
         }
+
     }
 
     @Override
@@ -266,18 +283,24 @@ public class MainActivity extends AppCompatActivity implements
 
     public void selectCity() {
         Intent intent = new Intent(this, CityActivity.class);
-        intent.putExtra(CURRENT_CITY, "北京");//TODO: read city setting
+        intent.putExtra(CURRENT_CITY, currentCity);
         startActivityForResult(intent, 0);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String city = data.getStringExtra(CityActivity.RESPONSE_CITY);
+        System.out.println("cur city: " + currentCity);
+        currentCity = data.getStringExtra(CityActivity.RESPONSE_CITY);
+        System.out.println("cur city: " + currentCity);
+
         switch (requestCode) {
             case 0:
-                System.out.println("Got city: " + city);
+                System.out.println("Got city: " + currentCity);
+
                 ForecastFragment forecastFragment = (ForecastFragment) this.getSupportFragmentManager().findFragmentByTag(TAG_HOME);
-                forecastFragment.ChooseCity(city);
+                forecastFragment.ChooseCity(currentCity);
+                prefsEditor.putString(CURRENT_CITY_KEY, currentCity);
+                prefsEditor.commit();
                 break;
             case 2:
                 break;
