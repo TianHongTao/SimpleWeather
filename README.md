@@ -16,9 +16,11 @@ V# SimpleWeather
 日历界面可以显示当前月的日历，当天日期通过红色圆圈标注,可以通过左右滑动/点击前后两个ImageButton切换月份来查看其他月份日历，点击home（房子造型）的图片按钮即可回到主页。
 
 具体效果如下图：
+
 ![](http://simpleweather.oss-cn-beijing.aliyuncs.com/18-7-25/33619403.jpg)
 
 文件组织如下图：
+
 ![](http://simpleweather.oss-cn-beijing.aliyuncs.com/18-7-25/6912410.jpg)
 
 **CalendarActivity.java:**
@@ -35,4 +37,5 @@ V# SimpleWeather
 
 **布局文件activity_calendar.xml:**
 整体采用LinearLayout布局，导航栏使用RelativeLayout，显示日历部分使用TableLayout。
+
 # 设置
