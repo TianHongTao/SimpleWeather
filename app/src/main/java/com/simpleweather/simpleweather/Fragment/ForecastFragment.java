@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -132,7 +133,7 @@ public class ForecastFragment extends Fragment {
                     }
                 }
             };
-            if (city != "") {
+            if (!city.equals("")) {
                 chooseCity(city);
 
             } else {
@@ -149,7 +150,7 @@ public class ForecastFragment extends Fragment {
         }
     }
 
-    public void setDailyInfo(int i) {
+    private void setDailyInfo(int i) {
         DailyWeatherInfo dailyWeatherInfo = weatherInfo.getDailyWeatherInfo(i);
         DecimalFormat df = new DecimalFormat("0.00");
         String D_infos = ("日期\n" + dailyWeatherInfo.getDate() + "\n") +
@@ -163,7 +164,7 @@ public class ForecastFragment extends Fragment {
         info.setText(D_infos);
     }
 
-    public void chooseIcon(String skycon) {
+    private void chooseIcon(String skycon) {
         switch (skycon) {
             case "晴天":
                 icon.setImageResource(R.drawable.ic_sun);
@@ -198,7 +199,7 @@ public class ForecastFragment extends Fragment {
         }
     }
 
-    public void chooseBackgroud(String skycon) {
+    private void chooseBackgroud(String skycon) {
         switch (skycon) {
             case "晴天":
                 fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.clear_day);
@@ -340,8 +341,6 @@ public class ForecastFragment extends Fragment {
                     Log.e("NetWork", "Get Coordinate NetWork ERRO！");
                 }
                 // 用ByteArrayBuffer缓存
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -363,7 +362,7 @@ public class ForecastFragment extends Fragment {
                     while ((temp = bufferedReader.readLine()) != null) {
                         if (temp.contains("city")) {
                             temp = temp.substring(temp.indexOf(":\""), temp.lastIndexOf('"'));
-                            stringBuilder.append(temp + " ");
+                            stringBuilder.append(temp).append(" ");
                         } else if (temp.contains("district")) {
                             temp = temp.substring(temp.indexOf(":\""), temp.lastIndexOf('"'));
                             stringBuilder.append(temp);
@@ -374,8 +373,6 @@ public class ForecastFragment extends Fragment {
                     Log.e("NetWork", "Get City NetWork ERRO！");
                 }
                 // 用ByteArrayBuffer缓存
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -413,16 +410,12 @@ public class ForecastFragment extends Fragment {
                 double speed = jsonObject.optDouble("speed");
                 weatherInfo.setNowWeatherInfo(temperature, skycon, pm25, cloudrate, humidity, distance,
                         nearlyIntensity, localIntensity, direction, speed);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        private void getWeatherforecast(String latitude, String longitude) {
+        private void getWeatherForecast(String latitude, String longitude) {
             try {
                 String temp;
                 URL url = new URL(String.format(HTTPS_API_GET_FORECAST_WEATHER, longitude, latitude));
@@ -520,11 +513,7 @@ public class ForecastFragment extends Fragment {
                             dailyAqi, dailyPrecipition, dailyDirection, dailySpeed, dailyHumidity);
                 }
                 weatherInfo.setDailyWeatherInfo(dailyWeatherInfos);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
         }
@@ -545,7 +534,7 @@ public class ForecastFragment extends Fragment {
                 }
                 Log.e("str", "wait");
                 getWeather(String.valueOf(latitude), String.valueOf(longitude));
-                getWeatherforecast(String.valueOf(latitude), String.valueOf(longitude));
+                getWeatherForecast(String.valueOf(latitude), String.valueOf(longitude));
                 msg.setData(data);
                 handler.sendMessage(msg);
             } catch (IOException e) {
@@ -554,14 +543,13 @@ public class ForecastFragment extends Fragment {
         }
     };
 
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case 1: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
                 }
-                return;
             }
         }
     }
