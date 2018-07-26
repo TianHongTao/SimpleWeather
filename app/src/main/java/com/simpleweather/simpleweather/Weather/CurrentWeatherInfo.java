@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Helper.Weather;
+package com.simpleweather.simpleweather.Weather;
 
 public class CurrentWeatherInfo {
     private double temperature;

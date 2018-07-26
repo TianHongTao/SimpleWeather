@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Activity;
+package com.simpleweather.simpleweather;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.simpleweather.simpleweather.R;
 
 import java.util.*;
 

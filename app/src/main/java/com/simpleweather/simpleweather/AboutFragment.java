@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Fragment;
+package com.simpleweather.simpleweather;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.simpleweather.simpleweather.R;
 
 
 public class AboutFragment extends Fragment {

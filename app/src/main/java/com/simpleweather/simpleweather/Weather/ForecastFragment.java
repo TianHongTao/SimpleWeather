@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Fragment;
+package com.simpleweather.simpleweather.Weather;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -27,10 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.simpleweather.simpleweather.R;
-import com.simpleweather.simpleweather.Helper.Weather.DailyWeatherInfo;
-import com.simpleweather.simpleweather.Helper.Weather.HoulyWeatherInfo;
-import com.simpleweather.simpleweather.Helper.Weather.Weather;
-import com.simpleweather.simpleweather.Helper.Weather.CurrentWeatherInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;

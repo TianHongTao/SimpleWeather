@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Activity;
+package com.simpleweather.simpleweather;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -19,9 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.simpleweather.simpleweather.R;
-import com.simpleweather.simpleweather.Fragment.AboutFragment;
-import com.simpleweather.simpleweather.Fragment.ForecastFragment;
+import com.simpleweather.simpleweather.Calendar.CalendarActivity;
+import com.simpleweather.simpleweather.Weather.ForecastFragment;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,

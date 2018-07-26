@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Helper.Calendar;
+package com.simpleweather.simpleweather.Calendar;
 
 import android.annotation.SuppressLint;
 

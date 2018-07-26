@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Activity;
+package com.simpleweather.simpleweather;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -14,7 +14,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
-import com.simpleweather.simpleweather.R;
 
 import java.util.List;
 

@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activity.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,27 +25,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.CityActivity"
+            android:name=".CityActivity"
             android:label="@string/title_activity_city"
-            android:parentActivityName=".Activity.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.simpleweather.simpleweather.Activity.MainActivity" />
+                android:value="com.simpleweather.simpleweather.MainActivity" />
         </activity>
         <activity
-            android:name=".Activity.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".Activity.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.simpleweather.simpleweather.Activity.MainActivity" />
+                android:value="com.simpleweather.simpleweather.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activity.CalendarActivity"
+            android:name=".Calendar.CalendarActivity"
             android:label="calendar"
             android:theme="@android:style/Theme.Holo"
-            android:parentActivityName=".Activity.MainActivity"></activity>
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>
