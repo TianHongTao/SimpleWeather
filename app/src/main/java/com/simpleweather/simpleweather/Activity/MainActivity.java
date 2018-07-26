@@ -1,5 +1,6 @@
 package com.simpleweather.simpleweather.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -27,30 +28,28 @@ public class MainActivity extends AppCompatActivity implements
         ForecastFragment.OnFragmentInteractionListener,
         AboutFragment.OnFragmentInteractionListener {
 
-    // index to identify current nav menu item
-    public static int navItemIndex = 0;
+    private static int navItemIndex = 0;
 
-    // tags used to attach the fragments
     private static final String TAG_HOME = "forecast";
     private static final String TAG_CALENDAR = "calendar";
     private static final String TAG_SETTING = "setting";
     private static final String TAG_ABOUT_US = "about us";
-
-    public static String CURRENT_TAG = TAG_HOME;
-    // toolbar titles respected to selected nav menu item
+    private static String CURRENT_TAG = TAG_HOME;
     private String[] activityTitles;
 
-    // flag to load home fragment when user presses back key
-    private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
+
     public static final String CURRENT_CITY = "com.simpleweather.simpleweather.CURRENT_CITY";
+    public static final String DEFAULT_CITY_VALUE = "北京";
     public static final String CURRENT_CITY_KEY = "current_city";
-    public SharedPreferences prefs;
-    public SharedPreferences.Editor prefsEditor;
+    public SharedPreferences preferences;
+    public SharedPreferences.Editor preferenceEditor;
     private String currentCity = null;
     public DrawerLayout drawer;
     public NavigationView navigationView;
+    public static final boolean SHOULD_BACK_HOME_ON_BACK_PRESS = true;
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +57,10 @@ public class MainActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferenceEditor = preferences.edit();
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefsEditor = prefs.edit();
-
-        currentCity = prefs.getString(CURRENT_CITY_KEY, "北京");
+        currentCity = preferences.getString(CURRENT_CITY_KEY, DEFAULT_CITY_VALUE);
 
         mHandler = new Handler();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -91,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements
             CURRENT_TAG = TAG_HOME;
             load();
         }
-//        forecastFragment.ChooseCity(currentCity);
-
     }
 
     @Override
@@ -102,7 +98,8 @@ public class MainActivity extends AppCompatActivity implements
             drawer.closeDrawer(GravityCompat.START);
             return;
         }
-        if (shouldLoadHomeFragOnBackPress) {
+        // flag to load home fragment when user presses back key
+        if (SHOULD_BACK_HOME_ON_BACK_PRESS) {
             // checking if user is on other navigation menu
             // rather than home
             if (navItemIndex != 0) {
@@ -151,24 +148,16 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void loadFragment() {
-        // set toolbar title
         setToolbarTitle();
-        // if user select the current navigation menu again, don't do anything
-        // just close the navigation drawer
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
-            // show or hide the fab button
             toggleFab();
             return;
         }
-        // Sometimes, when fragment has huge data, screen seems hanging
-        // when switching between navigation menus
-        // So using runnable, the fragment is loaded with cross fade effect
-        // This effect can be seen in GMail app
+
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                // update the main content by replacing fragments
                 Fragment fragment = getHomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
@@ -178,41 +167,19 @@ public class MainActivity extends AppCompatActivity implements
             }
         };
 
-        // If mPendingRunnable is not null, then add to the message queue
         mHandler.post(mPendingRunnable);
-        // show or hide the fab button
         toggleFab();
-        //Closing drawer on item click
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         switch (id) {
             case R.id.nav_forecast:
                 navItemIndex = 0;
@@ -274,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    public void selectCity() {
+    private void selectCity() {
         Intent intent = new Intent(this, CityActivity.class);
         intent.putExtra(CURRENT_CITY, currentCity);
         startActivityForResult(intent, 0);
@@ -291,9 +258,9 @@ public class MainActivity extends AppCompatActivity implements
                 System.out.println("Got city: " + currentCity);
 
                 ForecastFragment forecastFragment = (ForecastFragment) this.getSupportFragmentManager().findFragmentByTag(TAG_HOME);
-                forecastFragment.ChooseCity(currentCity);
-                prefsEditor.putString(CURRENT_CITY_KEY, currentCity);
-                prefsEditor.commit();
+                forecastFragment.chooseCity(currentCity);
+                preferenceEditor.putString(CURRENT_CITY_KEY, currentCity);
+                preferenceEditor.commit();
                 break;
             case 2:
                 break;

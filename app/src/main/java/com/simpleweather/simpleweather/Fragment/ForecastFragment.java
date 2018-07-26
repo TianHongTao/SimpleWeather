@@ -76,7 +76,7 @@ public class ForecastFragment extends Fragment {
     View F_view = null;
     Weather WInfo = new Weather();
 
-    public void ChooseCity(String city) {
+    public void chooseCity(String city) {
         this.city = city;
         is_choose = true;
         new Thread(networkTask).start();
@@ -141,7 +141,7 @@ public class ForecastFragment extends Fragment {
                 }
             };
             if (city != "") {
-                ChooseCity(city);
+                chooseCity(city);
 
             } else {
                 //TODO GPS FIRST LOGIN WILL EXIT(1);
