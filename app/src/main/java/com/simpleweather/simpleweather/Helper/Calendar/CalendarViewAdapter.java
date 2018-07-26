@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Calendar;
+package com.simpleweather.simpleweather.Helper.Calendar;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;

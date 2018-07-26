@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Weather;
+package com.simpleweather.simpleweather.Helper.Weather;
 
 public class Weather {
     private WeatherInfo nowWeatherInfo;

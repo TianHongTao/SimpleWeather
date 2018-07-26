@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Calendar;
+package com.simpleweather.simpleweather.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import com.simpleweather.simpleweather.Helper.Calendar.CalendarCard;
+import com.simpleweather.simpleweather.Helper.Calendar.CalendarViewAdapter;
+import com.simpleweather.simpleweather.Helper.Calendar.CustomDate;
 import com.simpleweather.simpleweather.R;
 
 public class CalendarActivity extends Activity implements OnClickListener, CalendarCard.OnCellClickListener {

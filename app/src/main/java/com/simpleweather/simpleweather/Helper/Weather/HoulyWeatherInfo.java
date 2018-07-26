@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.Weather;
+package com.simpleweather.simpleweather.Helper.Weather;
 
 public class HoulyWeatherInfo {
     private String datetime; //时间

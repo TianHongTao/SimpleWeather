@@ -1,13 +1,11 @@
-package com.simpleweather.simpleweather.Calendar;
+package com.simpleweather.simpleweather.Helper.Calendar;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 
 public class DateUtil {

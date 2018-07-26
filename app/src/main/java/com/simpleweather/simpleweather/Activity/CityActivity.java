@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.activity;
+package com.simpleweather.simpleweather.Activity;
 
 import android.content.Context;
 import android.content.Intent;

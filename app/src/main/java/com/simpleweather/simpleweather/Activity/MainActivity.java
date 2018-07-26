@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.activity;
+package com.simpleweather.simpleweather.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,10 +18,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.simpleweather.simpleweather.Calendar.CalendarActivity;
 import com.simpleweather.simpleweather.R;
-import com.simpleweather.simpleweather.fragment.AboutFragment;
-import com.simpleweather.simpleweather.fragment.ForecastFragment;
+import com.simpleweather.simpleweather.Fragment.AboutFragment;
+import com.simpleweather.simpleweather.Fragment.ForecastFragment;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,

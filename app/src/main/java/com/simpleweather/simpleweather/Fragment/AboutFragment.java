@@ -1,4 +1,4 @@
-package com.simpleweather.simpleweather.fragment;
+package com.simpleweather.simpleweather.Fragment;
 
 import android.content.Context;
 import android.net.Uri;
