@@ -14,37 +14,7 @@ public class DailyWeatherInfo {
     private double[] humidity;
 
     public String get_skycon_CN(String info) {
-        switch (info) {
-            case "CLEAR_DAY":
-                info = "晴天";
-                break;
-            case "CLEAR_NIGHT":
-                info = "晴夜";
-                break;
-            case "PARTLY_CLOUDY_DAY":
-                info = "多云天";
-                break;
-            case "PARTLY_CLOUDY_NIGHT":
-                info = "多云夜";
-                break;
-            case "CLOUDY":
-                info = "阴";
-                break;
-            case "RAIN":
-                info = "雨";
-                break;
-            case "SNOW":
-                info = "雪";
-                break;
-            case "WIND":
-                info = "风";
-                break;
-            case "HAZE":
-                info = "雾霾沙尘";
-                break;
-            default:
-                info = "NONE";
-        }
+        info = CurrentWeatherInfo.getSkyconString(info);
         return info;
     }
 

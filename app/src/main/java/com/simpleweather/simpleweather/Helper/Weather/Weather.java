@@ -1,16 +1,16 @@
 package com.simpleweather.simpleweather.Helper.Weather;
 
 public class Weather {
-    private WeatherInfo nowWeatherInfo;
+    private CurrentWeatherInfo currentWeatherInfo;
     private HoulyWeatherInfo[] hourlyWeatherInfo;
     private DailyWeatherInfo[] dailyWeatherInfo;
 
-    public void setNowWeatherInfo(WeatherInfo nowWeatherInfo) {
-        this.nowWeatherInfo = nowWeatherInfo;
+    public void setCurrentWeatherInfo(CurrentWeatherInfo currentWeatherInfo) {
+        this.currentWeatherInfo = currentWeatherInfo;
     }
 
     public Weather() {
-        nowWeatherInfo = new WeatherInfo();
+        currentWeatherInfo = new CurrentWeatherInfo();
         hourlyWeatherInfo = new HoulyWeatherInfo[48];
         for (int i = 0; i < hourlyWeatherInfo.length; i++) {
             hourlyWeatherInfo[i] = new HoulyWeatherInfo();
@@ -23,7 +23,7 @@ public class Weather {
 
     public void setNowWeatherInfo(double temperature, String skycon, double pm25, double cloudrate, double humidity
             , double distance, double intensity_n, double intensity_l, double direction, double speed) {
-        this.nowWeatherInfo = new WeatherInfo(temperature, skycon, pm25, cloudrate, humidity,
+        this.currentWeatherInfo = new CurrentWeatherInfo(temperature, skycon, pm25, cloudrate, humidity,
                 distance, intensity_n, intensity_l, direction, speed);
     }
 
@@ -35,8 +35,8 @@ public class Weather {
         this.hourlyWeatherInfo = hourlyWeatherInfo;
     }
 
-    public WeatherInfo getNowWeatherInfo() {
-        return nowWeatherInfo;
+    public CurrentWeatherInfo getCurrentWeatherInfo() {
+        return currentWeatherInfo;
     }
 
     public DailyWeatherInfo getDailyWeatherInfo(int i) {

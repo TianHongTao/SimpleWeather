@@ -30,7 +30,7 @@ import com.simpleweather.simpleweather.R;
 import com.simpleweather.simpleweather.Helper.Weather.DailyWeatherInfo;
 import com.simpleweather.simpleweather.Helper.Weather.HoulyWeatherInfo;
 import com.simpleweather.simpleweather.Helper.Weather.Weather;
-import com.simpleweather.simpleweather.Helper.Weather.WeatherInfo;
+import com.simpleweather.simpleweather.Helper.Weather.CurrentWeatherInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
@@ -249,7 +248,7 @@ public class ForecastFragment extends Fragment {
             info = fragmentView.findViewById(R.id.location);
             info.setText(val);
             info = fragmentView.findViewById(R.id.time);
-            WeatherInfo now = weatherInfo.getNowWeatherInfo();
+            CurrentWeatherInfo now = weatherInfo.getCurrentWeatherInfo();
             info.setText(weatherInfo.getHourlyWeatherInfo(0).getDatetime());
             info = fragmentView.findViewById(R.id.temperate);
             info.setText(String.valueOf(now.getTemperature()));

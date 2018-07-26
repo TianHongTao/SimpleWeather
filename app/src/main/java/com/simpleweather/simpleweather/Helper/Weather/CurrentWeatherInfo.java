@@ -1,6 +1,6 @@
 package com.simpleweather.simpleweather.Helper.Weather;
 
-public class WeatherInfo {
+public class CurrentWeatherInfo {
     private double temperature;
     private String skycon;
     private double pm25;
@@ -53,7 +53,7 @@ public class WeatherInfo {
     private double direction;
     private double speed;
 
-    public WeatherInfo() {
+    public CurrentWeatherInfo() {
         this.temperature = 0.0;
         this.skycon = "";
         this.pm25 = 0.0;
@@ -67,7 +67,12 @@ public class WeatherInfo {
     }
 
 
-    public String get_skycon_CN(String info) {
+    public String getSkyconText(String info) {
+        info = getSkyconString(info);
+        return info;
+    }
+
+    static String getSkyconString(String info) {
         switch (info) {
             case "CLEAR_DAY":
                 info = "晴天";
@@ -102,10 +107,10 @@ public class WeatherInfo {
         return info;
     }
 
-    public WeatherInfo(double temperature, String skycon, double pm25, double cloudrate, double humidity
+    public CurrentWeatherInfo(double temperature, String skycon, double pm25, double cloudrate, double humidity
             , double distance, double intensity_n, double intensity_l, double direction, double speed) {
         this.temperature = temperature;
-        this.skycon = get_skycon_CN(skycon);
+        this.skycon = getSkyconText(skycon);
         this.pm25 = pm25;
         this.cloudrate = cloudrate;
         this.humidity = humidity;
