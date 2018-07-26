@@ -4,6 +4,47 @@ public class WeatherInfo {
     private double temperature;
     private String skycon;
     private double pm25;
+
+    public void setCloudrate(double cloudrate) {
+        this.cloudrate = cloudrate;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setSkycon(String skycon) {
+        this.skycon = skycon;
+    }
+
+    public void setPm25(double pm25) {
+        this.pm25 = pm25;
+    }
+
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public void setIntensity_n(double intensity_n) {
+        this.intensity_n = intensity_n;
+    }
+
+    public void setIntensity_l(double intensity_l) {
+        this.intensity_l = intensity_l;
+    }
+
+    public void setDirection(double direction) {
+        this.direction = direction;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
     private double cloudrate;
     private double humidity;
     private double distance;

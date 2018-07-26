@@ -5,6 +5,10 @@ public class Weather {
     private HoulyWeatherInfo[] hourlyWeatherInfo;
     private DailyWeatherInfo[] dailyWeatherInfo;
 
+    public void setNowWeatherInfo(WeatherInfo nowWeatherInfo) {
+        this.nowWeatherInfo = nowWeatherInfo;
+    }
+
     public Weather() {
         nowWeatherInfo = new WeatherInfo();
         hourlyWeatherInfo = new HoulyWeatherInfo[48];

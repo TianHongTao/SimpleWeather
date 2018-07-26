@@ -175,6 +175,7 @@ public class DailyWeatherInfo {
         this.sunsetTime = sunsetTime;
     }
 
+
     public void setTemperature(double[] temperature) {
         this.temperature = temperature;
     }

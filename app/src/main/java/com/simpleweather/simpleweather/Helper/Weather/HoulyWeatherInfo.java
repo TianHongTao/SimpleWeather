@@ -17,6 +17,50 @@ public class HoulyWeatherInfo {
     private double temperature; // 温度;
     private String description;
 
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
+    }
+
+    public void setPm25(double pm25) {
+        this.pm25 = pm25;
+    }
+
+    public void setSkycon(String skycon) {
+        this.skycon = skycon;
+    }
+
+    public void setCloudrate(double cloudrate) {
+        this.cloudrate = cloudrate;
+    }
+
+    public void setAqi(double aqi) {
+        this.aqi = aqi;
+    }
+
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
+    }
+
+    public void setPrecipitation(double precipitation) {
+        this.precipitation = precipitation;
+    }
+
+    public void setDirection(double direction) {
+        this.direction = direction;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public HoulyWeatherInfo() {
         this.datetime = "";
         this.description = "";

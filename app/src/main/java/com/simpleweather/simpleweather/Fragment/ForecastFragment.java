@@ -1,10 +1,10 @@
 package com.simpleweather.simpleweather.Fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -54,31 +54,30 @@ import java.text.DecimalFormat;
  * create an instance of this fragment.
  */
 public class ForecastFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "CURRENT_CITY_MESSAGE";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARG_PARAM1 = "CURRENT_CITY";
+    public static final int MIN_TIME = 5000;
+    public static final int MIN_DISTANCE = 5000;
+    public static final String HTTPS_API_GET_COORODINATE = "https://api.map.baidu.com/geocoder?address=%s&output=json&key=37492c0ee6f924cb5e934fa08c6b167";
+    public static final String HTTPS_API_GET_CITY = "https://api.map.baidu.com/geocoder?output=json&location=%s,%s&ak=esNPFDwwsXWtsQfw4NMNmur1";
+    public static final String HTTPS_API_GET_WEATHERINFO = "https://api.caiyunapp.com/v2/gAC7WmaahV0uV8FW/%s,%s/realtime.jsonp";
+    public static final String HTTPS_API_GET_FORECAST_WEATHER = "https://api.caiyunapp.com/v2/gAC7WmaahV0uV8FW/%s,%s/forecast.jsonp";
 
     private OnFragmentInteractionListener mListener;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     private LocationManager locationManager;
-    private boolean is_choose = false;
+    private boolean isChooseCity = false;
     private String city = "";
     private double latitude = 39.913542;
     private double longitude = 116.379;
-    private TextView info1 = null;
+    private TextView info = null;
     HorizontalScrollView horizontalScrollView = null;
     ImageView icon = null;
-    Drawable background = null;
-    View F_view = null;
-    Weather WInfo = new Weather();
+    View fragmentView = null;
+    Weather weatherInfo = new Weather();
 
     public void chooseCity(String city) {
         this.city = city;
-        is_choose = true;
+        isChooseCity = true;
         new Thread(networkTask).start();
     }
 
@@ -86,15 +85,7 @@ public class ForecastFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ForecastFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static ForecastFragment newInstance(String city) {
         ForecastFragment fragment = new ForecastFragment();
         Bundle args = new Bundle();
@@ -110,6 +101,7 @@ public class ForecastFragment extends Fragment {
             city = getArguments().getString(ARG_PARAM1);
         }
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        assert locationManager != null;
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             LocationListener locationListener = new LocationListener() {
                 // Provider的状态在可用、暂时不可用和无服务三个状态直接切换时触发此函数
@@ -132,7 +124,7 @@ public class ForecastFragment extends Fragment {
                 // 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
                 @Override
                 public void onLocationChanged(Location location) {
-                    if (location != null && is_choose == false) {
+                    if (location != null && !isChooseCity) {
                         Log.e("Map", "Location changed : Lat: " + location.getLatitude() + " Lng: " + location.getLongitude());
                         latitude = location.getLatitude(); // 经度
                         longitude = location.getLongitude(); // 纬度
@@ -144,13 +136,12 @@ public class ForecastFragment extends Fragment {
                 chooseCity(city);
 
             } else {
-                //TODO GPS FIRST LOGIN WILL EXIT(1);
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Log.d("str", "== in android 6.0, getting permission");
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5000, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, locationListener);
                 String locationProvider = LocationManager.GPS_PROVIDER;
                 Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
                 new Thread(networkTask).start();
@@ -158,23 +149,21 @@ public class ForecastFragment extends Fragment {
         }
     }
 
-    public void set_Dinfo(int i) {
-        DailyWeatherInfo DWInfo = WInfo.getDailyWeatherInfo(i);
-        StringBuilder D_infos = new StringBuilder();
+    public void setDailyInfo(int i) {
+        DailyWeatherInfo dailyWeatherInfo = weatherInfo.getDailyWeatherInfo(i);
         DecimalFormat df = new DecimalFormat("0.00");
-        D_infos.append("日期\n" + DWInfo.getDate() + "\n");
-        D_infos.append("降水 " + String.valueOf(df.format(DWInfo.getPrecipitation()[1] * 100)) + "%\n");
-        D_infos.append("天气 " + DWInfo.getSkycon() + "\n");
-        D_infos.append("AQI " + String.valueOf(DWInfo.getAqi()[1]) + "\n");
-        D_infos.append("高温 " + String.valueOf(DWInfo.getTemperature()[0]) + "°\n");
-        D_infos.append("低温 " + String.valueOf(DWInfo.getTemperature()[1]) + "°\n");
-        D_infos.append("日出 " + String.valueOf(DWInfo.getSunsetTime()[0]) + "\n");
-        D_infos.append("日落 " + String.valueOf(DWInfo.getSunsetTime()[1]) + "\n");
-        info1.setText(D_infos.toString());
-        return;
+        String D_infos = ("日期\n" + dailyWeatherInfo.getDate() + "\n") +
+                "降水 " + String.valueOf(df.format(dailyWeatherInfo.getPrecipitation()[1] * 100)) + "%\n" +
+                "天气 " + dailyWeatherInfo.getSkycon() + "\n" +
+                "AQI " + String.valueOf(dailyWeatherInfo.getAqi()[1]) + "\n" +
+                "高温 " + String.valueOf(dailyWeatherInfo.getTemperature()[0]) + "°\n" +
+                "低温 " + String.valueOf(dailyWeatherInfo.getTemperature()[1]) + "°\n" +
+                "日出 " + String.valueOf(dailyWeatherInfo.getSunsetTime()[0]) + "\n" +
+                "日落 " + String.valueOf(dailyWeatherInfo.getSunsetTime()[1]) + "\n";
+        info.setText(D_infos);
     }
 
-    public void choos_Icon(String skycon) {
+    public void chooseIcon(String skycon) {
         switch (skycon) {
             case "晴天":
                 icon.setImageResource(R.drawable.ic_sun);
@@ -209,113 +198,115 @@ public class ForecastFragment extends Fragment {
         }
     }
 
-    public void choos_Backgroud(String skycon) {
+    public void chooseBackgroud(String skycon) {
         switch (skycon) {
             case "晴天":
-                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.clear_day);
+                fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.clear_day);
                 break;
             case "晴夜":
-                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.clear_night);
+                fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.clear_night);
                 break;
             case "多云天":
-                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.partly_cloudy);
+                fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.partly_cloudy);
                 break;
             case "多云夜":
-                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.partly_clear_night);
+                fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.partly_clear_night);
                 break;
             case "阴":
-                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.cloudy);
+                fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.cloudy);
                 break;
             case "雨":
-                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.rain);
+                fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.rain);
                 break;
             case "雪":
-                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.snow);
+                fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.snow);
                 break;
             case "风":
-                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.wind);
+                fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.wind);
                 break;
             case "雾霾沙尘":
-                F_view.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.haze);
+                fragmentView.findViewById(R.id.r_layout).setBackgroundResource(R.drawable.haze);
                 break;
             default:
                 ;
         }
     }
 
+    @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
+        @SuppressLint("SetTextI18n")
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Bundle data = msg.getData();
             String val = data.getString("city");
             Log.i("mylog", "请求结果为-->" + val);
+            assert val != null;
             val = val.replace(":\"", " ");
 
             // UI界面的更新等相关操作
-            info1 = F_view.findViewById(R.id.location);
-            info1.setText(val);
-            info1 = F_view.findViewById(R.id.time);
-            WeatherInfo now = WInfo.getNowWeatherInfo();
-            info1.setText(WInfo.getHourlyWeatherInfo(0).getDatetime());
-            info1 = F_view.findViewById(R.id.temperate);
-            info1.setText(String.valueOf(now.getTemperature()));
-            info1 = F_view.findViewById(R.id.description);
-            info1.setText(WInfo.getHourlyWeatherInfo(0).getDescription());
-            info1 = F_view.findViewById(R.id.aqi);
-            info1.setText(String.valueOf(WInfo.getHourlyWeatherInfo(0).getAqi()));
-            info1 = F_view.findViewById(R.id.sun_rise);
-            info1.setText(String.valueOf(WInfo.getDailyWeatherInfo(0).getSunsetTime()[0]));
-            info1 = F_view.findViewById(R.id.sun_set);
-            info1.setText(String.valueOf(WInfo.getDailyWeatherInfo(0).getSunsetTime()[1]));
-            info1 = F_view.findViewById(R.id.today);
-            set_Dinfo(0);
-            info1 = F_view.findViewById(R.id.first_day);
-            set_Dinfo(1);
-            info1 = F_view.findViewById(R.id.second_day);
-            set_Dinfo(2);
-            info1 = F_view.findViewById(R.id.third_day);
-            set_Dinfo(3);
-            info1 = F_view.findViewById(R.id.fourth_day);
-            set_Dinfo(4);
-            DecimalFormat df = new DecimalFormat("0.00");
-            info1 = F_view.findViewById(R.id.pm25);
-            info1.setText(String.valueOf(now.getPm25()));
-            info1 = F_view.findViewById(R.id.humidity);
-            info1.setText(String.valueOf(df.format(now.getHumidity() * 100)) + "%");
-            info1 = F_view.findViewById(R.id.intensity);
-            info1.setText(String.valueOf(df.format(now.getIntensity_l() * 100)) + "%");
-            info1 = F_view.findViewById(R.id.direction);
-            info1.setText(String.valueOf(now.getDirection()));
-            info1 = F_view.findViewById(R.id.speed);
-            info1.setText(String.valueOf(now.getSpeed()));
-            horizontalScrollView = F_view.findViewById(R.id.hourly_info);
+            info = fragmentView.findViewById(R.id.location);
+            info.setText(val);
+            info = fragmentView.findViewById(R.id.time);
+            WeatherInfo now = weatherInfo.getNowWeatherInfo();
+            info.setText(weatherInfo.getHourlyWeatherInfo(0).getDatetime());
+            info = fragmentView.findViewById(R.id.temperate);
+            info.setText(String.valueOf(now.getTemperature()));
+            info = fragmentView.findViewById(R.id.description);
+            info.setText(weatherInfo.getHourlyWeatherInfo(0).getDescription());
+            info = fragmentView.findViewById(R.id.aqi);
+            info.setText(String.valueOf(weatherInfo.getHourlyWeatherInfo(0).getAqi()));
+            info = fragmentView.findViewById(R.id.sun_rise);
+            info.setText(String.valueOf(weatherInfo.getDailyWeatherInfo(0).getSunsetTime()[0]));
+            info = fragmentView.findViewById(R.id.sun_set);
+            info.setText(String.valueOf(weatherInfo.getDailyWeatherInfo(0).getSunsetTime()[1]));
+            info = fragmentView.findViewById(R.id.today);
+            setDailyInfo(0);
+            info = fragmentView.findViewById(R.id.first_day);
+            setDailyInfo(1);
+            info = fragmentView.findViewById(R.id.second_day);
+            setDailyInfo(2);
+            info = fragmentView.findViewById(R.id.third_day);
+            setDailyInfo(3);
+            info = fragmentView.findViewById(R.id.fourth_day);
+            setDailyInfo(4);
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            info = fragmentView.findViewById(R.id.pm25);
+            info.setText(String.valueOf(now.getPm25()));
+            info = fragmentView.findViewById(R.id.humidity);
+            info.setText(String.valueOf(decimalFormat.format(now.getHumidity() * 100)) + "%");
+            info = fragmentView.findViewById(R.id.intensity);
+            info.setText(String.valueOf(decimalFormat.format(now.getIntensity_l() * 100)) + "%");
+            info = fragmentView.findViewById(R.id.direction);
+            info.setText(String.valueOf(now.getDirection()));
+            info = fragmentView.findViewById(R.id.speed);
+            info.setText(String.valueOf(now.getSpeed()));
+            horizontalScrollView = fragmentView.findViewById(R.id.hourly_info);
             LinearLayout linearLayout = horizontalScrollView.findViewById(R.id.hourly_info_layout);
             for (int i = 0; i < 48; i++) {
-                HoulyWeatherInfo HWInfo = WInfo.getHourlyWeatherInfo(i);
-                StringBuilder D_infos = new StringBuilder();
-                String string = HWInfo.getDatetime();
-                D_infos.append("\n" + string.substring(0, string.indexOf(" ")) + "\n");
-                D_infos.append(string.substring(string.indexOf(" ")) + "\n");
-                D_infos.append("降水 " + String.valueOf(df.format(HWInfo.getPrecipitation() * 100)) + "%\n");
-                D_infos.append("天气 " + HWInfo.getSkycon() + "\n");
-                D_infos.append("AQI " + String.valueOf(HWInfo.getAqi()) + "\n");
-                D_infos.append("云量 " + String.valueOf(HWInfo.getCloudrate()) + "\n");
-                D_infos.append("温度 " + String.valueOf(HWInfo.getTemperature()) + "°\n");
-                D_infos.append("湿度 " + String.valueOf(HWInfo.getHumidity()) + "\n");
-                D_infos.append("风向 " + String.valueOf(HWInfo.getDirection()) + "\n");
-                D_infos.append("风速 " + String.valueOf(HWInfo.getSpeed()) + "\n");
-
-                TextView T = new TextView(linearLayout.getContext());
-                T.setText(D_infos.toString());
-                T.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                T.setTextColor(Color.parseColor("#FDFDFD"));
-                T.setGravity(Gravity.CENTER);
-                linearLayout.addView(T);
+                HoulyWeatherInfo hourlyWeatherInfo = weatherInfo.getHourlyWeatherInfo(i);
+                StringBuilder infos = new StringBuilder();
+                String string = hourlyWeatherInfo.getDatetime();
+                infos.append("\n").append(string.substring(0, string.indexOf(" "))).append("\n");
+                infos.append(string.substring(string.indexOf(" "))).append("\n");
+                infos.append("降水 ").append(String.valueOf(decimalFormat.format(hourlyWeatherInfo.getPrecipitation() * 100))).append("%\n");
+                infos.append("天气 ").append(hourlyWeatherInfo.getSkycon()).append("\n");
+                infos.append("AQI ").append(String.valueOf(hourlyWeatherInfo.getAqi())).append("\n");
+                infos.append("云量 ").append(String.valueOf(hourlyWeatherInfo.getCloudrate())).append("\n");
+                infos.append("温度 ").append(String.valueOf(hourlyWeatherInfo.getTemperature())).append("°\n");
+                infos.append("湿度 ").append(String.valueOf(hourlyWeatherInfo.getHumidity())).append("\n");
+                infos.append("风向 ").append(String.valueOf(hourlyWeatherInfo.getDirection())).append("\n");
+                infos.append("风速 ").append(String.valueOf(hourlyWeatherInfo.getSpeed())).append("\n");
+                TextView textView = new TextView(linearLayout.getContext());
+                textView.setText(infos.toString());
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+                textView.setTextColor(Color.parseColor("#FDFDFD"));
+                textView.setGravity(Gravity.CENTER);
+                linearLayout.addView(textView);
             }
-            icon = F_view.findViewById(R.id.icon);
-            choos_Icon(now.getSkycon());
-            choos_Backgroud(now.getSkycon());
+            icon = fragmentView.findViewById(R.id.icon);
+            chooseIcon(now.getSkycon());
+            chooseBackgroud(now.getSkycon());
 
         }
     };
@@ -325,26 +316,23 @@ public class ForecastFragment extends Fragment {
      */
     Runnable networkTask = new Runnable() {
 
-        private void get_coordinate(String city) {
+        private void getCoordinate(String city) {
             try {
                 // 定义获取文件内容的URL
-                URL myURL = new URL("https://api.map.baidu.com/geocoder?address=" + city +
-                        "&output=json&key=37492c0ee6f924cb5e934fa08c6b167");
+                URL myURL = new URL(String.format(HTTPS_API_GET_COORODINATE, city));
                 // 打开URL链接
-                HttpURLConnection ucon = (HttpURLConnection) myURL.openConnection();
-                System.out.println("https://api.map.baidu.com/geocoder?address=" + city +
-                        "&output=json&key=37492c0ee6f924cb5e934fa08c6b167");
-                int c = ucon.getResponseCode();
+                HttpURLConnection httpURLConnection = (HttpURLConnection) myURL.openConnection();
+                System.out.println(String.format(HTTPS_API_GET_COORODINATE, city));
                 // 使用InputStream，从URLConnection读取数据
-                if (ucon.getResponseCode() == 200) {
-                    InputStream is = ucon.getInputStream();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+                if (httpURLConnection.getResponseCode() == 200) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
                     String temp = null;
-                    while ((temp = br.readLine()) != null) {
-                        if (temp.indexOf("lng") != -1) {
+                    while ((temp = bufferedReader.readLine()) != null) {
+                        if (temp.contains("lng")) {
                             longitude = Double.valueOf(temp.substring(temp.indexOf(":") + 1, temp.length() - 2));
                         }
-                        if (temp.indexOf("lat") != -1) {
+                        if (temp.contains("lat")) {
                             latitude = Double.valueOf(temp.substring(temp.indexOf(":") + 1, temp.length() - 2));
                         }
                     }
@@ -363,19 +351,16 @@ public class ForecastFragment extends Fragment {
             StringBuilder stringBuilder = new StringBuilder();
             try {
                 // 定义获取文件内容的URL
-                URL myURL = new URL("https://api.map.baidu.com/geocoder?output=json&location="
-                        + latitude + "," + longitude + "&ak=esNPFDwwsXWtsQfw4NMNmur1");
+                URL myURL = new URL(String.format(HTTPS_API_GET_CITY, latitude, longitude));
                 // 打开URL链接
-                HttpURLConnection ucon = (HttpURLConnection) myURL.openConnection();
-                System.out.println("https://api.map.baidu.com/geocoder?output=json&location="
-                        + latitude + "," + longitude + "&ak=esNPFDwwsXWtsQfw4NMNmur1");
-                int c = ucon.getResponseCode();
+                HttpURLConnection httpURLConnection = (HttpURLConnection) myURL.openConnection();
+                System.out.println(String.format(HTTPS_API_GET_CITY, latitude, longitude));
                 // 使用InputStream，从URLConnection读取数据
-                if (ucon.getResponseCode() == 200) {
-                    InputStream is = ucon.getInputStream();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+                if (httpURLConnection.getResponseCode() == 200) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
                     String temp = null;
-                    while ((temp = br.readLine()) != null) {
+                    while ((temp = bufferedReader.readLine()) != null) {
                         if (temp.contains("city")) {
                             temp = temp.substring(temp.indexOf(":\""), temp.lastIndexOf('"'));
                             stringBuilder.append(temp + " ");
@@ -400,47 +385,34 @@ public class ForecastFragment extends Fragment {
         private void getWeather(String latitude, String longitude) {
             try {
                 String temp;
-                URL url = new URL("https://api.caiyunapp.com/v2/gAC7WmaahV0uV8FW/" + longitude + "," + latitude + "/realtime.jsonp");
-                URLConnection con = url.openConnection();
-                InputStream is = con.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
-                temp = br.readLine();
+                URL url = new URL(String.format(HTTPS_API_GET_WEATHERINFO, longitude, latitude));
+                URLConnection urlConnection = url.openConnection();
+                InputStream inputStream = urlConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
+                temp = bufferedReader.readLine();
                 JSONObject jsonObject = new JSONObject(temp);
                 String result = jsonObject.optString("result");
                 jsonObject = new JSONObject(result);
-                //温度 天气 pm25 云量 相对湿度 降水 风
                 double temperature = jsonObject.optDouble("temperature");
                 String skycon = jsonObject.optString("skycon");
                 double pm25 = jsonObject.optDouble("pm25");
                 double cloudrate = jsonObject.optDouble("cloudrate");
                 double humidity = jsonObject.optDouble("humidity");
-                //需要解析
                 String precipitation = jsonObject.optString("precipitation");
-                //需要解析
                 String wind = jsonObject.getString("wind");
                 jsonObject = new JSONObject(precipitation);
-                //需要解析
                 String nearest = jsonObject.optString("nearest");
-                //需要解析
                 String local = jsonObject.optString("local");
-
-                //解析precipitation
-                //解析nearest
                 jsonObject = new JSONObject(nearest);
                 double distance = jsonObject.optDouble("distance");
-                double intensity_n = jsonObject.optDouble("intensity");
-                //解析local
+                double nearlyIntensity = jsonObject.optDouble("intensity");
                 jsonObject = new JSONObject(local);
-                double intensity_l = jsonObject.optDouble("intensity");
-
-                //解析wind
+                double localIntensity = jsonObject.optDouble("intensity");
                 jsonObject = new JSONObject(wind);
                 double direction = jsonObject.optDouble("direction");
                 double speed = jsonObject.optDouble("speed");
-
-                WInfo.setNowWeatherInfo(temperature, skycon, pm25, cloudrate, humidity, distance,
-                        intensity_n, intensity_l, direction, speed);
-
+                weatherInfo.setNowWeatherInfo(temperature, skycon, pm25, cloudrate, humidity, distance,
+                        nearlyIntensity, localIntensity, direction, speed);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -453,11 +425,11 @@ public class ForecastFragment extends Fragment {
         private void getWeatherforecast(String latitude, String longitude) {
             try {
                 String temp;
-                URL url = new URL("https://api.caiyunapp.com/v2/gAC7WmaahV0uV8FW/" + longitude + "," + latitude + "/forecast.jsonp");
-                URLConnection con = url.openConnection();
-                InputStream is = con.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
-                temp = br.readLine();
+                URL url = new URL(String.format(HTTPS_API_GET_FORECAST_WEATHER, longitude, latitude));
+                URLConnection urlConnection = url.openConnection();
+                InputStream inputStream = urlConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
+                temp = bufferedReader.readLine();
                 JSONObject jsonObject = new JSONObject(temp);
                 String result = jsonObject.optString("result");
                 jsonObject = new JSONObject(result);
@@ -476,22 +448,22 @@ public class ForecastFragment extends Fragment {
                 JSONArray wind = new JSONArray(jsonObject.optString("wind"));
                 JSONArray temperature = new JSONArray(jsonObject.optString("temperature"));
 
-                HoulyWeatherInfo[] HWInfo = new HoulyWeatherInfo[48];
-                for (int i = 0; i < HWInfo.length; i++) {
+                HoulyWeatherInfo[] hourlyWeatherInfos = new HoulyWeatherInfo[48];
+                for (int i = 0; i < hourlyWeatherInfos.length; i++) {
                     String datetime = pm25.getJSONObject(i).optString("datetime");
-                    double s_pm25 = pm25.getJSONObject(i).optDouble("value");
-                    String s_skycon = skycon.getJSONObject(i).optString("value");
-                    double s_cloudrate = cloudrate.getJSONObject(i).optDouble("value");
-                    double s_aqi = aqi.getJSONObject(i).optDouble("value");
-                    double s_humidity = humidity.getJSONObject(i).optDouble("value");
-                    double s_precipitation = precipitation.getJSONObject(i).optDouble("value");
-                    double s_temperature = temperature.getJSONObject(i).optDouble("value");
-                    double s_direction = wind.getJSONObject(i).optDouble("direction");
-                    double s_speed = wind.getJSONObject(i).optDouble("speed");
-                    HWInfo[i] = new HoulyWeatherInfo(description, datetime, s_pm25, s_skycon, s_cloudrate, s_aqi
-                            , s_humidity, s_precipitation, s_direction, s_speed, s_temperature);
+                    double hourlyPm25 = pm25.getJSONObject(i).optDouble("value");
+                    String hourlySkycon = skycon.getJSONObject(i).optString("value");
+                    double hourlyCloudrate = cloudrate.getJSONObject(i).optDouble("value");
+                    double hourlyAqi = aqi.getJSONObject(i).optDouble("value");
+                    double hourlyHumidity = humidity.getJSONObject(i).optDouble("value");
+                    double hourlyPrecipitation = precipitation.getJSONObject(i).optDouble("value");
+                    double hourlyTemperature = temperature.getJSONObject(i).optDouble("value");
+                    double hourlyDirection = wind.getJSONObject(i).optDouble("direction");
+                    double hourlySpeed = wind.getJSONObject(i).optDouble("speed");
+                    hourlyWeatherInfos[i] = new HoulyWeatherInfo(description, datetime, hourlyPm25, hourlySkycon, hourlyCloudrate, hourlyAqi
+                            , hourlyHumidity, hourlyPrecipitation, hourlyDirection, hourlySpeed, hourlyTemperature);
                 }
-                WInfo.setHourlyWeatherInfo(HWInfo);
+                weatherInfo.setHourlyWeatherInfo(hourlyWeatherInfos);
 
                 /*-------------------------daily-----------------------------*/
                 jsonObject = new JSONObject(daily);
@@ -505,49 +477,49 @@ public class ForecastFragment extends Fragment {
                 wind = new JSONArray(jsonObject.optString("wind"));
                 humidity = new JSONArray(jsonObject.optString("humidity"));
 
-                DailyWeatherInfo[] DWInfo = new DailyWeatherInfo[5];
-                for (int i = 0; i < DWInfo.length; i++) {
-                    String[] sunsetTime = new String[2];
-                    sunsetTime[0] = astro.getJSONObject(i).optJSONObject("sunset").optString("time");
-                    sunsetTime[1] = astro.getJSONObject(i).optJSONObject("sunrise").optString("time");
+                DailyWeatherInfo[] dailyWeatherInfos = new DailyWeatherInfo[5];
+                for (int i = 0; i < dailyWeatherInfos.length; i++) {
+                    String[] dailySunTime = new String[2];
+                    dailySunTime[0] = astro.getJSONObject(i).optJSONObject("sunset").optString("time");
+                    dailySunTime[1] = astro.getJSONObject(i).optJSONObject("sunrise").optString("time");
                     String date = temperature.getJSONObject(i).optString("date");
-                    double[] s_temperature = new double[3];
-                    s_temperature[0] = temperature.getJSONObject(i).optDouble("max");
-                    s_temperature[1] = temperature.getJSONObject(i).optDouble("avg");
-                    s_temperature[2] = temperature.getJSONObject(i).optDouble("min");
-                    double[] s_pm25 = new double[3];
-                    s_pm25[0] = pm25.getJSONObject(i).optDouble("max");
-                    s_pm25[1] = pm25.getJSONObject(i).optDouble("avg");
-                    s_pm25[2] = pm25.getJSONObject(i).optDouble("min");
-                    String s_skycon = skycon.getJSONObject(i).optString("value");
-                    double[] s_cloudrate = new double[3];
-                    s_cloudrate[0] = cloudrate.getJSONObject(i).optDouble("max");
-                    s_cloudrate[1] = cloudrate.getJSONObject(i).optDouble("avg");
-                    s_cloudrate[2] = cloudrate.getJSONObject(i).optDouble("min");
-                    double[] s_aqi = new double[3];
-                    s_aqi[0] = aqi.getJSONObject(i).optDouble("max");
-                    s_aqi[1] = aqi.getJSONObject(i).optDouble("avg");
-                    s_aqi[2] = aqi.getJSONObject(i).optDouble("min");
-                    double[] s_precipition = new double[3];
-                    s_precipition[0] = precipitation.getJSONObject(i).optDouble("max");
-                    s_precipition[1] = precipitation.getJSONObject(i).optDouble("avg");
-                    s_precipition[2] = precipitation.getJSONObject(i).optDouble("min");
-                    double direction[] = new double[3];
-                    direction[0] = wind.getJSONObject(i).optJSONObject("max").optDouble("direction");
-                    direction[1] = wind.getJSONObject(i).optJSONObject("avg").optDouble("direction");
-                    direction[2] = wind.getJSONObject(i).optJSONObject("min").optDouble("direction");
-                    double speed[] = new double[3];
-                    speed[0] = wind.getJSONObject(i).optJSONObject("max").optDouble("speed");
-                    speed[1] = wind.getJSONObject(i).optJSONObject("avg").optDouble("speed");
-                    speed[2] = wind.getJSONObject(i).optJSONObject("min").optDouble("speed");
-                    double[] s_humidity = new double[3];
-                    s_humidity[0] = humidity.getJSONObject(i).optDouble("max");
-                    s_humidity[1] = humidity.getJSONObject(i).optDouble("avg");
-                    s_humidity[2] = humidity.getJSONObject(i).optDouble("min");
-                    DWInfo[i] = new DailyWeatherInfo(date, sunsetTime, s_temperature, s_pm25, s_skycon, s_cloudrate,
-                            s_aqi, s_precipition, direction, speed, s_humidity);
+                    double[] dailyTemperature = new double[3];
+                    dailyTemperature[0] = temperature.getJSONObject(i).optDouble("max");
+                    dailyTemperature[1] = temperature.getJSONObject(i).optDouble("avg");
+                    dailyTemperature[2] = temperature.getJSONObject(i).optDouble("min");
+                    double[] dailyPm25 = new double[3];
+                    dailyPm25[0] = pm25.getJSONObject(i).optDouble("max");
+                    dailyPm25[1] = pm25.getJSONObject(i).optDouble("avg");
+                    dailyPm25[2] = pm25.getJSONObject(i).optDouble("min");
+                    String dailySkycon = skycon.getJSONObject(i).optString("value");
+                    double[] dailyCloudrate = new double[3];
+                    dailyCloudrate[0] = cloudrate.getJSONObject(i).optDouble("max");
+                    dailyCloudrate[1] = cloudrate.getJSONObject(i).optDouble("avg");
+                    dailyCloudrate[2] = cloudrate.getJSONObject(i).optDouble("min");
+                    double[] dailyAqi = new double[3];
+                    dailyAqi[0] = aqi.getJSONObject(i).optDouble("max");
+                    dailyAqi[1] = aqi.getJSONObject(i).optDouble("avg");
+                    dailyAqi[2] = aqi.getJSONObject(i).optDouble("min");
+                    double[] dailyPrecipition = new double[3];
+                    dailyPrecipition[0] = precipitation.getJSONObject(i).optDouble("max");
+                    dailyPrecipition[1] = precipitation.getJSONObject(i).optDouble("avg");
+                    dailyPrecipition[2] = precipitation.getJSONObject(i).optDouble("min");
+                    double dailyDirection[] = new double[3];
+                    dailyDirection[0] = wind.getJSONObject(i).optJSONObject("max").optDouble("direction");
+                    dailyDirection[1] = wind.getJSONObject(i).optJSONObject("avg").optDouble("direction");
+                    dailyDirection[2] = wind.getJSONObject(i).optJSONObject("min").optDouble("direction");
+                    double dailySpeed[] = new double[3];
+                    dailySpeed[0] = wind.getJSONObject(i).optJSONObject("max").optDouble("speed");
+                    dailySpeed[1] = wind.getJSONObject(i).optJSONObject("avg").optDouble("speed");
+                    dailySpeed[2] = wind.getJSONObject(i).optJSONObject("min").optDouble("speed");
+                    double[] dailyHumidity = new double[3];
+                    dailyHumidity[0] = humidity.getJSONObject(i).optDouble("max");
+                    dailyHumidity[1] = humidity.getJSONObject(i).optDouble("avg");
+                    dailyHumidity[2] = humidity.getJSONObject(i).optDouble("min");
+                    dailyWeatherInfos[i] = new DailyWeatherInfo(date, dailySunTime, dailyTemperature, dailyPm25, dailySkycon, dailyCloudrate,
+                            dailyAqi, dailyPrecipition, dailyDirection, dailySpeed, dailyHumidity);
                 }
-                WInfo.setDailyWeatherInfo(DWInfo);
+                weatherInfo.setDailyWeatherInfo(dailyWeatherInfos);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -563,11 +535,11 @@ public class ForecastFragment extends Fragment {
             Message msg = new Message();
             Bundle data = new Bundle();
             try {
-                if (is_choose == false) {
+                if (!isChooseCity) {
                     data.putString("city", getCity(String.valueOf(latitude), String.valueOf(longitude)));
                     msg.setData(data);
                 } else {
-                    get_coordinate(city);
+                    getCoordinate(city);
                     data.putString("city", city);
                     msg.setData(data);
                 }
@@ -582,33 +554,15 @@ public class ForecastFragment extends Fragment {
         }
     };
 
-    /*
-           //开始更新位置信息
-           locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-           //获取当前位置信息
-           String locationProvider = LocationManager.GPS_PROVIDER;
-           Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-
-           //决定何时停止更新位置信息
-           locationManager.removeUpdates(locationListener);
-
-   */
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
                 return;
             }
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
@@ -624,11 +578,10 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
-        this.F_view = view;
+        this.fragmentView = view;
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -663,7 +616,6 @@ public class ForecastFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
