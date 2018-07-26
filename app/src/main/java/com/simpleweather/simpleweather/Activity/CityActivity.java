@@ -1,8 +1,10 @@
 package com.simpleweather.simpleweather.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +18,10 @@ import com.simpleweather.simpleweather.R;
 import java.util.*;
 
 public class CityActivity extends AppCompatActivity {
-    public static final String RESPONSE_CITY = "com.simpleweather.simpleweather.RESPONSE_CITY";
+    public static final String RESPONSE_CITY_MESSAGE = "com.simpleweather.simpleweather.RESPONSE_CITY_MESSAGE";
 
-    static public List<String> list = new ArrayList<String>();
-    static public List<String> listTag = new ArrayList<String>();
+    private static List<String> list = new ArrayList<String>();
+    private static List<String> listTag = new ArrayList<String>();
 
     private void getData() {
         String city_name_list[] = CityActivity.this.getResources()
@@ -57,6 +59,8 @@ public class CityActivity extends AppCompatActivity {
             return super.isEnabled(position);
         }
 
+        @SuppressLint("InflateParams")
+        @NonNull
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
@@ -78,7 +82,7 @@ public class CityActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.city_activity_city_select);
         Intent intent = getIntent();
-        String currentCity = intent.getStringExtra(MainActivity.CURRENT_CITY);
+        String currentCity = intent.getStringExtra(MainActivity.CURRENT_CITY_MESSAGE);
 
         if (list.isEmpty()) {
             getData();
@@ -90,7 +94,7 @@ public class CityActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent();
-                intent.putExtra(RESPONSE_CITY, CityActivity.list.get(i));
+                intent.putExtra(RESPONSE_CITY_MESSAGE, CityActivity.list.get(i));
                 CityActivity.this.setResult(0, intent);
                 CityActivity.this.finish();
             }

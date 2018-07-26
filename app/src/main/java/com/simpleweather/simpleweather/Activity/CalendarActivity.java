@@ -15,19 +15,15 @@ import com.simpleweather.simpleweather.Helper.Calendar.CustomDate;
 import com.simpleweather.simpleweather.R;
 
 public class CalendarActivity extends Activity implements OnClickListener, CalendarCard.OnCellClickListener {
-    private ViewPager mViewPager;
-    private int mCurrentIndex = 498;
-    private CalendarCard[] mShowViews;
+    private ViewPager viewPager;
+    private int currentIndex = 498;
     private CalendarViewAdapter<CalendarCard> adapter;
     private SildeDirection mDirection = SildeDirection.NO_SILDE;
+    private TextView monthText;
 
     enum SildeDirection {
         RIGHT, LEFT, NO_SILDE;
     }
-
-    private ImageButton preImgBtn, nextImgBtn, homeImgBtn;
-    private TextView monthText;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +31,10 @@ public class CalendarActivity extends Activity implements OnClickListener, Calen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_calendar);
 
-        mViewPager = (ViewPager) this.findViewById(R.id.vp_calendar);
-        homeImgBtn = (ImageButton) this.findViewById(R.id.home);
-        preImgBtn = (ImageButton) this.findViewById(R.id.btnPreMonth);
-        nextImgBtn = (ImageButton) this.findViewById(R.id.btnNextMonth);
+        viewPager = (ViewPager) this.findViewById(R.id.vp_calendar);
+        ImageButton homeImgBtn = (ImageButton) this.findViewById(R.id.home);
+        ImageButton preImgBtn = (ImageButton) this.findViewById(R.id.btnPreMonth);
+        ImageButton nextImgBtn = (ImageButton) this.findViewById(R.id.btnNextMonth);
         monthText = (TextView) this.findViewById(R.id.tvCurrentMonth);
         preImgBtn.setOnClickListener(this);
         nextImgBtn.setOnClickListener(this);
@@ -54,9 +50,9 @@ public class CalendarActivity extends Activity implements OnClickListener, Calen
     }
 
     private void setViewPager() {
-        mViewPager.setAdapter(adapter);
-        mViewPager.setCurrentItem(498);
-        mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(498);
+        viewPager.setOnPageChangeListener(new OnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
@@ -83,10 +79,10 @@ public class CalendarActivity extends Activity implements OnClickListener, Calen
                 finish();
                 break;
             case R.id.btnPreMonth:
-                mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+                viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
                 break;
             case R.id.btnNextMonth:
-                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                 break;
             default:
                 break;
@@ -95,7 +91,6 @@ public class CalendarActivity extends Activity implements OnClickListener, Calen
 
     @Override
     public void clickDate(CustomDate date) {
-
     }
 
     @Override
@@ -103,29 +98,24 @@ public class CalendarActivity extends Activity implements OnClickListener, Calen
         monthText.setText(date.month + "月");
     }
 
-    /**
-     * 计算方向
-     *
-     * @param arg0
-     */
     private void measureDirection(int arg0) {
 
-        if (arg0 > mCurrentIndex) {
+        if (arg0 > currentIndex) {
             mDirection = SildeDirection.RIGHT;
 
-        } else if (arg0 < mCurrentIndex) {
+        } else if (arg0 < currentIndex) {
             mDirection = SildeDirection.LEFT;
         }
-        mCurrentIndex = arg0;
+        currentIndex = arg0;
     }
 
     // 更新日历视图
     private void updateCalendarView(int arg0) {
-        mShowViews = adapter.getAllItems();
+        CalendarCard[] showViews = adapter.getAllItems();
         if (mDirection == SildeDirection.RIGHT) {
-            mShowViews[arg0 % mShowViews.length].rightSlide();
+            showViews[arg0 % showViews.length].rightSlide();
         } else if (mDirection == SildeDirection.LEFT) {
-            mShowViews[arg0 % mShowViews.length].leftSlide();
+            showViews[arg0 % showViews.length].leftSlide();
         }
         mDirection = SildeDirection.NO_SILDE;
     }

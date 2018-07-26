@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#29b6f6</color>
     <color name="white">#ffffff</color>
-    <color name="canlendar_text_color">#323232</color>
+    <color name="calendarTextColor">#323232</color>
 </resources>

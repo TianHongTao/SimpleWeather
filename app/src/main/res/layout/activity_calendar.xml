@@ -67,37 +67,37 @@
                 <TextView
                     style="@style/dateStyle"
                     android:text="@string/sunday"
-                    android:textColor="@color/canlendar_text_color" />
+                    android:textColor="@color/calendarTextColor" />
 
                 <TextView
                     style="@style/dateStyle"
                     android:text="@string/monday"
-                    android:textColor="@color/canlendar_text_color" />
+                    android:textColor="@color/calendarTextColor" />
 
                 <TextView
                     style="@style/dateStyle"
-                    android:text="@string/thesday"
-                    android:textColor="@color/canlendar_text_color" />
+                    android:text="@string/thersday"
+                    android:textColor="@color/calendarTextColor" />
 
                 <TextView
                     style="@style/dateStyle"
                     android:text="@string/wednesday"
-                    android:textColor="@color/canlendar_text_color" />
+                    android:textColor="@color/calendarTextColor" />
 
                 <TextView
                     style="@style/dateStyle"
                     android:text="@string/thursday"
-                    android:textColor="@color/canlendar_text_color" />
+                    android:textColor="@color/calendarTextColor" />
 
                 <TextView
                     style="@style/dateStyle"
                     android:text="@string/friday"
-                    android:textColor="@color/canlendar_text_color" />
+                    android:textColor="@color/calendarTextColor" />
 
                 <TextView
                     style="@style/dateStyle"
                     android:text="@string/saturday"
-                    android:textColor="@color/canlendar_text_color" />
+                    android:textColor="@color/calendarTextColor" />
             </TableRow>
         </TableLayout>
     </LinearLayout>

@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private Handler mHandler;
 
-    public static final String CURRENT_CITY = "com.simpleweather.simpleweather.CURRENT_CITY";
+    public static final String CURRENT_CITY_MESSAGE = "com.simpleweather.simpleweather.CURRENT_CITY_MESSAGE";
     public static final String DEFAULT_CITY_VALUE = "北京";
     public static final String CURRENT_CITY_KEY = "current_city";
     public SharedPreferences preferences;
@@ -243,14 +243,14 @@ public class MainActivity extends AppCompatActivity implements
 
     private void selectCity() {
         Intent intent = new Intent(this, CityActivity.class);
-        intent.putExtra(CURRENT_CITY, currentCity);
+        intent.putExtra(CURRENT_CITY_MESSAGE, currentCity);
         startActivityForResult(intent, 0);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.println("cur city: " + currentCity);
-        currentCity = data.getStringExtra(CityActivity.RESPONSE_CITY);
+        currentCity = data.getStringExtra(CityActivity.RESPONSE_CITY_MESSAGE);
         System.out.println("cur city: " + currentCity);
 
         switch (requestCode) {
