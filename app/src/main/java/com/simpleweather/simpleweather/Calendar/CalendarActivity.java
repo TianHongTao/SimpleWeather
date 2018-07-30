@@ -15,8 +15,8 @@ public class CalendarActivity extends Activity implements OnClickListener, Calen
     private ViewPager viewPager;
     private int currentIndex = 498;
     private CalendarViewAdapter<CalendarCard> adapter;
-    private SildeDirection mDirection = SildeDirection.NO_SILDE;
     private TextView monthText;
+    private SildeDirection mDirection = SildeDirection.NO_SILDE;
 
     enum SildeDirection {
         RIGHT, LEFT, NO_SILDE;

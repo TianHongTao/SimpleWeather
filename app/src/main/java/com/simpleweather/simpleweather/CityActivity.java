@@ -23,9 +23,9 @@ public class CityActivity extends AppCompatActivity {
     private static List<String> listTag = new ArrayList<String>();
 
     private void getData() {
-        String city_name_list[] = CityActivity.this.getResources()
+        String cityNameList[] = CityActivity.this.getResources()
                 .getStringArray(R.array.city_description_list);
-        String city_list_tag[] = CityActivity.this.getResources()
+        String cityListTag[] = CityActivity.this.getResources()
                 .getStringArray(R.array.city_group_list);
 
         String cityTag[] = {"热门", "A", "B", "C", "D", "E", "F", "G", "H", "J",
@@ -37,7 +37,7 @@ public class CityActivity extends AppCompatActivity {
             list.add(cityTag[j - 1]);
             listTag.add(cityTag[j - 1]);
             listsize[j] = listsize[j - 1] + listsize[j];
-            list.addAll(Arrays.asList(city_name_list).subList(listsize[j - 1], listsize[j]));
+            list.addAll(Arrays.asList(cityNameList).subList(listsize[j - 1], listsize[j]));
         }
     }
 
